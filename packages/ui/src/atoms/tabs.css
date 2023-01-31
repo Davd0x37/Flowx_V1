@@ -1,0 +1,8 @@
+.tabs {
+  background: var(--accent-dark);
+}
+
+.tab {
+  background: green;
+  margin: 2rem;
+}

@@ -1,0 +1,17 @@
+.button {
+  border-radius: var(--radius);
+  background-color: var(--shade-light);
+  color: var(--text);
+  outline: none;
+  border: 1px solid var(--accent-dark);
+  padding: 0.5rem 1.5rem;
+  font-size: 1.6rem;
+  transition-duration: var(--transition-duration);
+  transition-property: var(--transition-props);
+
+  &:hover,
+  &:active {
+    background-color: var(--accent-light);
+    color: var(--text-light);
+  }
+}
