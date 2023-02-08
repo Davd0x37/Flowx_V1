@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import './tabs.css';
+import css from './Tabs.module.css';
 
 export type TabID = number;
 export interface ITabType {
@@ -11,13 +11,13 @@ export interface ITabProps {
   title: ITabType['title'];
 }
 
-export const Tab = ({ children }: PropsWithChildren & ITabProps) => {
-  return <div className="tab">{children}</div>;
-};
-
 export interface ITabsProps {
   onTabChange?: (tab: ITabType) => void;
 }
+
+export const Tab = ({ children }: PropsWithChildren & ITabProps) => {
+  return <div className={css.tab}>{children}</div>;
+};
 
 export const Tabs = ({ children, onTabChange }: PropsWithChildren & ITabsProps) => {
   const [tabsList, setTabsList] = useState<ITabType[]>([]);
@@ -37,22 +37,26 @@ export const Tabs = ({ children, onTabChange }: PropsWithChildren & ITabsProps) 
       return;
     }
 
+    if (activeTab == id) {
+      return;
+    }
+
     setActiveTab(id);
     onTabChange?.(tab);
   };
 
   return (
-    <div className="tabs">
+    <div className={css.tabs}>
       <span>active: {activeTab}</span>
-      <div className="tabs__header">
+      <div className={css.tabs__header}>
         {tabsList.map(({ title }, idx) => (
-          <span className="tabs__title" key={idx} onClick={() => changeTab(idx)}>
+          <span className={css.tabs__title} key={idx} onClick={() => changeTab(idx)}>
             {title}
           </span>
         ))}
       </div>
 
-      <div className="tabs__wrapper">{tabs.filter((_, idx) => idx === activeTab)}</div>
+      <div className={css.tabs__wrapper}>{tabs.filter((_, idx) => idx === activeTab)}</div>
     </div>
   );
 };

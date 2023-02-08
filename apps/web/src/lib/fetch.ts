@@ -1,6 +1,6 @@
-import { internalGuard } from '@/helpers';
+import { internalGuard } from '../helpers';
 
-export const useFetch = async (url: string, options?: RequestInit): Promise<Response> => {
+export const Fetch = async (url: string, options?: RequestInit): Promise<Response> => {
   const wnd = internalGuard('fetch');
 
   try {

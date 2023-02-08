@@ -1,1 +1,1 @@
-export const GET_REDIRECT_URI = (name: string): string => `${window.location.origin}/authorize/${name}`;
+export const GET_REDIRECT_URI = (url: string, name: string): string => `${url}/authorize/${name}`;

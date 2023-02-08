@@ -1,4 +1,4 @@
-import { defaultGlobal } from './rootConfig';
+import { defaultGlobal } from './RootConfig';
 
 /**
  * Checks if global container provides required functionality

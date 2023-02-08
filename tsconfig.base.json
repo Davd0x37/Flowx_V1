@@ -23,7 +23,15 @@
     "paths": {
       "@flowx/ui": ["./packages/ui/*"],
       "@flowx/eslint-config-flowx": ["./packages/eslint-config-flowx/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "postcssOptions": true
+        }
+      }
+    ]
   },
   "exclude": ["node_modules"]
 }

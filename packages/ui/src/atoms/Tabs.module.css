@@ -2,6 +2,16 @@
   background: var(--accent-dark);
 }
 
+.tabs__header {
+  background: red;
+}
+
+.tabs__title {
+}
+
+.tabs__wrapper {
+}
+
 .tab {
   background: green;
   margin: 2rem;

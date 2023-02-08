@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import styles from './button.module.css';
+import css from './Button.module.css';
 
 interface IOnClick {
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown;
@@ -8,7 +8,7 @@ interface IOnClick {
 
 export const Button = ({ children, onClick }: PropsWithChildren & IOnClick) => {
   return (
-    <button className={styles.button} onClick={(e) => onClick && onClick(e)}>
+    <button className={css.button} onClick={(e) => onClick && onClick(e)}>
       {children}
     </button>
   );

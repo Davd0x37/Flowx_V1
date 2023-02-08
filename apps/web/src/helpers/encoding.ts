@@ -14,11 +14,7 @@ export const base64urlencode = (input: ArrayBuffer): string =>
  * @param {string} str String to encode
  * @return {*}  {ArrayBuffer} Encoded string
  */
-export const str2ab = (str: string): ArrayBuffer => {
-  const encoder = new TextEncoder();
-
-  return encoder.encode(str);
-};
+export const str2ab = (str: string): ArrayBuffer => new TextEncoder().encode(str);
 
 /**
  * Decode ArrayBuffer as string

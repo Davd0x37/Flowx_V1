@@ -3,7 +3,7 @@ const timerAsync = (ms: number) =>
     setTimeout(resolve, ms);
   });
 
-export const sleep = async (time: number): Promise<void> => {
+export const wait = async (time: number): Promise<void> => {
   await timerAsync(time);
 };
 
@@ -13,7 +13,7 @@ export const sleep = async (time: number): Promise<void> => {
  * @param {number} expiresIn add seconds to selected date
  * @returns {boolean} If selected date with added seconds has expired?
  */
-export const dateExpired = (previousDate: Date, expiresIn: number): boolean => {
+export const isDateExpired = (previousDate: Date, expiresIn: number): boolean => {
   const now: Date = new Date();
   const prev: Date = previousDate;
 

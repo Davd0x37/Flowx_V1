@@ -1,4 +1,4 @@
-import { FileReadHandlers } from '@/types/fs';
+import { FileReadHandlers } from '../Types';
 
 export const readFile = (file: File, handlers: FileReadHandlers): void => {
   const reader = new FileReader();
@@ -15,7 +15,7 @@ export const readFile = (file: File, handlers: FileReadHandlers): void => {
   reader.readAsText(file);
 };
 
-export const generateDownloadUrl = (data: string | ArrayBuffer): string => {
+export const createDownloadURL = (data: string | ArrayBuffer): string => {
   const blob = new Blob([data], {
     type: 'application/octet-stream',
   });

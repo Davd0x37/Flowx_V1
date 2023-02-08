@@ -1,12 +1,11 @@
-import { Service } from '@/types/service';
-
-import { dateExpired } from './utils';
+import { Service } from '../Types';
+import { isDateExpired } from './Time';
 
 export const tokensExpired = (receivedTokensTime: string, expiresIn: string): boolean => {
   if (receivedTokensTime) {
     const rTT = new Date(receivedTokensTime);
     const expiresInNum = Number(expiresIn);
-    return dateExpired(rTT, expiresInNum);
+    return isDateExpired(rTT, expiresInNum);
   }
 
   return false;
