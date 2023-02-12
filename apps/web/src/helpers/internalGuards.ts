@@ -1,3 +1,4 @@
+import { RUNTIME_ERRORS, RuntimeAppError } from '../utils/error';
 import { defaultGlobal } from './RootConfig';
 
 /**
@@ -15,11 +16,23 @@ export const isSupported = <T extends object>(fun: string, container: T): boolea
  *
  * @template T
  * @param {T} expr Expression to check
- * @param {string} [msg] Exception message
+ * @param {RUNTIME_ERRORS} [name] Exception name
+ * @param {string} [message] Exception message
+ * @param {unknown} [cause] Detailed explanation of error
  * @return {NonNullable<T>} {asserts} Return unwrapped value if not thrown
  */
-export function assert<T>(expr: T, msg?: string): asserts expr is NonNullable<T> {
-  if (!expr) throw new Error(msg);
+export function assert<T>(
+  expr: T,
+  name: RUNTIME_ERRORS,
+  message: string,
+  cause?: unknown
+): asserts expr is NonNullable<T> {
+  if (!expr)
+    throw new RuntimeAppError({
+      name,
+      message,
+      cause,
+    });
 }
 
 /**
@@ -31,7 +44,9 @@ export function assert<T>(expr: T, msg?: string): asserts expr is NonNullable<T>
 export const defaultGlobalExist = (): NonNullable<typeof defaultGlobal> => {
   const defaultGlobalRef = defaultGlobal;
 
-  assert(defaultGlobalRef, 'Global / Window is not available!');
+  assert(defaultGlobalRef, 'GLOBAL_HANDLER_NOT_AVAILABLE', 'Global / Window not available!', {
+    code: 'Requested "Global / Window" handler is not available in current runtime',
+  });
 
   return defaultGlobalRef;
 };
@@ -46,7 +61,9 @@ export const defaultGlobalExist = (): NonNullable<typeof defaultGlobal> => {
 export const internalGuard = (fun: string): NonNullable<typeof defaultGlobal> => {
   const defaultGlobalRef = defaultGlobalExist();
 
-  assert(isSupported(fun, defaultGlobalRef), `Required "${fun}" is not available in current runtime!`);
+  assert(isSupported(fun, defaultGlobalRef), 'RUNTIME_FUNCTION_NOT_AVAILABLE', `${fun} is not availbalbe`, {
+    code: `Requested "${fun}" is not available in current runtime!`,
+  });
 
   return defaultGlobalRef;
 };

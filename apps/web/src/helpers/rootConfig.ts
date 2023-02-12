@@ -1,5 +1,7 @@
+export const isDevEnv = true;
+
 export const isBrowser = typeof window !== 'undefined';
-export const isNode = typeof process === 'object';
+// export const isNode = typeof process === 'object';
 
 export const defaultWindow = isBrowser ? window : undefined;
 export const defaultDocument = isBrowser ? window.document : undefined;
@@ -13,6 +15,6 @@ export const defaultGlobal =
     ? self
     : typeof window !== 'undefined'
     ? window
-    : typeof global !== 'undefined'
-    ? global
+    // : typeof global !== 'undefined'
+    // ? global
     : undefined;

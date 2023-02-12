@@ -1,4 +1,9 @@
 /**
+ * Constant size for code verifier in Uint8Array - default 32 bytes
+ */
+export const CODE_VERIFIER_LENGTH = 32;
+
+/**
  * Initialization vector length
  */
 export const IV_LEN = 16;

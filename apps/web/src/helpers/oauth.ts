@@ -1,5 +1,5 @@
 import { Service } from '../Types';
-import { isDateExpired } from './Time';
+import { isDateExpired } from '../utils/time.util';
 
 export const tokensExpired = (receivedTokensTime: string, expiresIn: string): boolean => {
   if (receivedTokensTime) {

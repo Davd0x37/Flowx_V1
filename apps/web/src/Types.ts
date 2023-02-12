@@ -1,51 +1,168 @@
 // #############################
-// 				  INTERFACES
+// 				  OAUTH
 // #############################
 
-export interface AuthParameters {
-  // Authorization url
-  authorizationUri: string;
-  // Client ID
+export const IResponse = {
+  CODE: 'code',
+} as const;
+
+export const IGrant = {
+  AUTHORIZATION: 'authorization_code',
+  REFRESH_TOKEN: 'refresh_token',
+} as const;
+
+export const IAuthenticationAction = {
+  REQUEST_DATA: 'request_data',
+  REQUEST_TOKENS: 'request_tokens',
+  REFRESH_TOKENS: 'refresh_tokens',
+  AUTHENTICATE_SERVICE: 'authenticate_service',
+} as const;
+
+export type ResponseType = keyof typeof IResponse;
+export type GrantType = keyof typeof IGrant;
+export type AuthenticationActionType = keyof typeof IAuthenticationAction;
+export type CodeChallengeMethodType = 'S256' | 'plain';
+export type OAuthEndpoints = 'tokenEndpoint' | 'authorizeEndpoint' | 'discoveryEndpoint';
+
+export interface AuthSettings {
+  /**
+   * URL of OAuth2 server
+   */
+  server?: string;
+
+  /**
+   * OAuth2 client id - required to authenticate requests with your application
+   */
   clientId: string;
-  // Client secret
-  clientSecret: string;
-  // Algorithm used to generate code challenge
-  codeChallengeMethod: 'S256';
-  // In order to generate the code challenge, your app should
-  // hash the code verifier using the SHA256 algorithm - @Spotify
-  codeChallenge: string;
-  // Cryptographically random string between 43 and 128 characters in length - @Spotify
-  codeVerifier: string;
-  // Code received from service after authorization - used to exchange for access token
-  code: string;
-  // Information about what token we want from the service
-  grantType: GrantTypeEnum;
-  // Generated automatically
-  redirectUri: string;
-  // For now it's code because we use PKCE
-  responseType: ResponseTypeEnum;
-  // A space-separated list of scopes. - @Spotify
-  // List of scopes from which we'll downloading our data
-  scope: string;
-  // Generated token/word/something that will be used to verify received tokens
-  // from service
-  state: string;
-  // server Path where codes are exchanged for tokens
-  tokenEndpointUri: string;
+
+  /**
+   * OAuth2 secret code - required only for authorization code and client credentials
+   */
+  clientSecret?: string;
+
+  /**
+   * Required for authorization code flow - by default it is /authorize endpoint
+   */
+  authorizationEndpoint?: string;
+
+  /**
+   * Required endpoint for requesting and refreshing tokens
+   */
+  tokenEndpoint?: string;
+
+  /**
+   * OAuth2 discovery endpoint
+   * For most services it is '.well-known/oauth-authorization-server'
+   * Useful for discovering other endpoints if previous are not provided
+   */
+  discoveryEndpoint?: string;
 }
 
-export interface TokenParameters {
+export interface AuthorizeParameters {
+  /**
+   * URL of OAuth2 server
+   */
+  server: string;
+
+  /**
+   * OAuth2 client id - required to authenticate requests with your application
+   */
+  clientId: string;
+
+  /**
+   * Almost everywhere it is code for authorization code flow
+   */
+  responseType: ResponseType;
+
+  /**
+   * Selected page to redirect user after authentication
+   */
+  redirectUri: string;
+
+  /**
+   * Generated nonce that will be used to verify received tokens from service
+   */
+  state?: string;
+
+  /**
+   * List of required scopes to access data
+   */
+  scope: string | string[];
+
+  /**
+   * Default true for some services
+   * show window authentication to user once again if this option is set to true
+   */
+  show_dialog?: boolean;
+
+  /**
+   * Algorithm used to generate code challenge
+   */
+  codeChallengeMethod?: CodeChallengeMethodType;
+
+  /**
+   * Generated code challenge using selected method
+   */
+  codeChallenge?: string;
+}
+
+export interface CodeChallengeStruct {
+  method: CodeChallengeMethodType;
+
+  codeChallenge: string;
+}
+
+export interface AuthorizeResponseValidationParameters {
+  state?: string;
+}
+
+export interface AuthorizeResponseValidation {
+  code: string;
+}
+
+export interface OAuthTokenRequest {
+  clientId: string;
+  clientSecret: string;
+  grantType: GrantType;
+  code: string;
+  redirectUri: string;
+  codeVerifier?: string;
+  refreshToken?: string;
+}
+
+// // Cryptographically random string between 43 and 128 characters in length - @Spotify
+// codeVerifier: string;
+// // Code received from service after authorization - used to exchange for access token
+// code: string;
+// // Information about what token we want from the service
+// grantType: GrantType;
+
+export interface RequestTokenResponse {
+  access_token: string;
+  token_type: string;
+  scope: string;
+  expires_in: number;
+  refresh_token: string;
+}
+
+export interface OAuthTokens {
   // Access token required to make server calls to service
   accessToken: string;
+
   // Bearer, Basic etc.
   tokenType: string;
+
   // Most services provide expires time in seconds
-  expiresIn: string;
+  expiresIn: number;
+
   // Token used to refresh access token
   refreshToken: string;
+
   // Time of recent request tokens
-  receivedTokensTime: number;
+  dateOfLastRequest: number;
 }
+
+export type RequestMethodTypes = 'POST' | 'GET' | 'UPDATE';
 
 export interface FileReadHandlers {
   onload: (result: string, event: ProgressEvent<FileReader>) => void;
@@ -169,48 +286,5 @@ export interface ConvertedStore {
 //   children?: SidebarPath[];
 //   actions?: Actions;
 // }
-
-// #############################
-// 					 	ENUMS
-// #############################
-
-export enum ResponseTypeEnum {
-  CODE = 'code',
-}
-
-export enum GrantTypeEnum {
-  AUTHORIZATION = 'authorization_code',
-  REFRESH_TOKEN = 'refresh_token',
-}
-
-export enum AuthenticationActionEnum {
-  REQUEST_DATA = 0,
-  REQUEST_TOKENS = 1,
-  REFRESH_TOKENS = 2,
-  AUTHENTICATE_SERVICE = 3,
-}
-
-// #############################
-// 						TYPES
-// #############################
-
-export type AuthURI = Pick<
-  AuthParameters,
-  'clientId' | 'responseType' | 'redirectUri' | 'codeChallengeMethod' | 'codeChallenge'
-> &
-  Partial<Pick<AuthParameters, 'state' | 'scope'>>;
-
-export type AuthURIGen = Pick<AuthParameters, 'authorizationUri' | 'codeVerifier' | 'codeChallenge'>;
-
-export type POST = Partial<
-  Pick<AuthParameters, 'clientId' | 'redirectUri' | 'grantType' | 'code' | 'codeVerifier'> &
-    Pick<TokenParameters, 'refreshToken'>
->;
-
-export type GET = Pick<TokenParameters, 'accessToken' | 'tokenType'>;
-
-export type Tokens = Record<string, unknown>;
-
-export type Selector = Record<string, string> | Record<string, string>[];
 
 export type NotificationMode = 'success' | 'info' | 'warning' | 'error';

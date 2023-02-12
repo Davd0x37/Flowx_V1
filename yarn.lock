@@ -1058,13 +1058,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.11.19":
-  version: 18.11.19
-  resolution: "@types/node@npm:18.11.19"
-  checksum: d7cd19fcfc59cbdd3f9ba0b4072cb7adc21bd575bd8eb7d7e698975e63564aaa83f03434f32b12331f84f73d0b369d9cbe2371e359d9d7f5c3361f4987f4f7da
-  languageName: node
-  linkType: hard
-
 "@types/prop-types@npm:*":
   version: 15.7.5
   resolution: "@types/prop-types@npm:15.7.5"
@@ -2560,7 +2553,6 @@ __metadata:
   resolution: "flowx@workspace:."
   dependencies:
     "@trivago/prettier-plugin-sort-imports": ^4.0.0
-    "@types/node": ^18.11.19
     eslint: ^8.33.0
     prettier: ^2.8.3
     typescript: ^4.9.4
