@@ -25,7 +25,7 @@ export type ResponseType = 'code';
 export type GrantType = 'authorization_code' | 'refresh_token';
 export type AuthenticationActionType = 'request_data' | 'request_tokens' | 'refresh_tokens' | 'authenticate_service';
 export type CodeChallengeMethodType = 'S256' | 'plain';
-export type OAuthEndpoints = 'tokenEndpoint' | 'authorizeEndpoint' | 'discoveryEndpoint';
+export type OAuthEndpoints = 'tokenEndpoint' | 'authorizationEndpoint' | 'discoveryEndpoint';
 
 export interface OAuthSettings {
   /**
@@ -120,38 +120,28 @@ export interface OAuthParametersRequest {
   codeChallenge?: string;
 }
 
+/**
+ * UNIONS
+ */
 export type OAuthValidationParameters = Pick<OAuthParametersRequest, 'state' | 'nonce'>;
-
 export type OAuthCodeChallengeStruct = Pick<OAuthParametersRequest, 'codeChallengeMethod' | 'codeChallenge'>;
 
 export type OAuthAuthorizeParameters = OAuthValidationParameters &
   OAuthCodeChallengeStruct &
-  Required<Pick<OAuthSettings, 'server' | 'clientId'>> &
   Pick<OAuthParametersRequest, 'responseType' | 'redirectUri' | 'scope' | 'showDialog'>;
 
 export type OAuthResponseValidation = Pick<OAuthParametersRequest, 'code'>;
 
-export type OAuthAccessTokenRequest = Required<Pick<OAuthParametersRequest, 'code' | 'redirectUri' | 'grantType'>>;
-export type OAuthAccessTokenRequestPKCE = Required<
-  { grantType: 'authorization_code' } & Pick<OAuthParametersRequest, 'code' | 'redirectUri' | 'codeVerifier'> &
-    Pick<OAuthSettings, 'clientId'>
+export type OAuthAccessTokenRequest = Required<
+  { grantType: 'authorization_code' } & Pick<OAuthParametersRequest, 'code' | 'redirectUri'>
 >;
+export type OAuthAccessTokenRequestPKCE = OAuthAccessTokenRequest &
+  Required<Pick<OAuthParametersRequest, 'codeVerifier'>>;
 
-export type OAuthRefreshTokensRequest = Required<Pick<OAuthParametersRequest, 'grantType' | 'refreshToken'>>;
-export type OAuthRefreshTokensRequestPKCE = Required<
-  { grantType: 'refresh_token' } & Pick<OAuthParametersRequest, 'grantType' | 'refreshToken'> &
-    Pick<OAuthSettings, 'clientId'>
+export type OAuthRefreshTokensRequest = Required<
+  { grantType: 'refresh_token' } & Pick<OAuthParametersRequest, 'refreshToken'>
 >;
-
-export interface OAuthTokenRequest {
-  grantType: GrantType;
-  code: string;
-  redirectUri: string;
-  clientId: string;
-  clientSecret: string;
-  codeVerifier?: string;
-  refreshToken?: string;
-}
+export type OAuthRefreshTokensRequestPKCE = OAuthRefreshTokensRequest;
 
 export interface OAuthTokens {
   // Access token required to make server calls to service
@@ -177,8 +167,6 @@ export interface OAuthRequestTokenResponse {
   expires_in: number;
   refresh_token: string;
 }
-
-export type RequestMethodTypes = 'POST' | 'GET' | 'UPDATE';
 
 export interface FileReadHandlers {
   onload: (result: string, event: ProgressEvent<FileReader>) => void;

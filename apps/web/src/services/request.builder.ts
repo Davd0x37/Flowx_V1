@@ -2,8 +2,12 @@ export class URLBuilder {
   private url: URL;
   private pathNames: string[] = [];
 
-  constructor(url: string | URL) {
+  constructor(url: string | URL, initialParameters?: Record<string, string>) {
     this.url = new URL(url);
+
+    if (initialParameters) {
+      this.addParameter(initialParameters);
+    }
   }
 
   public getURL(): URL {

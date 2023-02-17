@@ -7,6 +7,7 @@ import { ThemeContext } from './context/ThemeContext';
 import { debug } from './helpers';
 import useDeviceColorScheme from './hooks/use-device-color-scheme';
 import {
+  OAuthBaseAuthenticator,
   generateAuthorizeUri,
   generateCodeVerifier,
   generateServerConfig,
@@ -43,70 +44,46 @@ export default function App() {
       //   return;
       // }
 
-      // const serverConfig = await generateServerConfig({
-      //   server: 'https://accounts.spotify.com',
-      //   clientId: 'd25bc7a3d320492ab31175f5d881a6af',
-      //   clientSecret: 'd590a7177f354dbc8b16837b07f23334'
-      // })
-      const serverConfig = await generateServerConfig({
+      const baseAuthenticator = new OAuthBaseAuthenticator({
         server: 'https://accounts.spotify.com',
         clientId: 'd25bc7a3d320492ab31175f5d881a6af',
         clientSecret: 'd590a7177f354dbc8b16837b07f23334',
         authorizationEndpoint: '/authorize',
         tokenEndpoint: '/api/token',
-        discoveryEndpoint: '.well-known/openid-configuration',
+        discoveryEndpoint: '/.well-known/openid-configuration',
       });
-
-      // const codeVerifier = 'loY5DbB_ELxMzUOcwPxClxrJD7PATpqHm3yhJEPh2lw';
-      // console.log('code', codeVerifier)
-
-      //   const codeChallenge = await getCodeChallenge(codeVerifier);
-      //   if (!codeChallenge) return;
-
-      //   const optionsuri = {
-      //     server: 'https://accounts.spotify.com/authorize',
-      //     clientId: id,
-      //     state: 'sdasdasdasd',
-      //     responseType: '' as 'CODE',
-      //     redirectUri: 'http://localhost:5173/authorize/spotify',
-      //     scope: ['user-read-email'],
-      //     codeChallenge: codeChallenge.codeChallenge,
-      //     codeChallengeMethod: codeChallenge.codeChallengeMethod,
-      //   };
-
+      const codeVerifier = 'loY5DbB_ELxMzUOcwPxClxrJD7PATpqHm3yhJEPh2lw';
+      const codeChallenge = await baseAuthenticator.generatePKCECodeChallenge(codeVerifier);
+      if (!codeChallenge) return;
+      const state = 'asdasdasdasd';
+      const redirectUri = 'http://localhost:5173/authorize/spotify';
+      const url = baseAuthenticator.getAuthorizeURL({
+        state,
+        responseType: 'code',
+        redirectUri,
+        scope: ['user-read-email'],
+        codeChallenge: codeChallenge.codeChallenge,
+        codeChallengeMethod: codeChallenge.codeChallengeMethod,
+      });
       //   const url = generateAuthorizeUri(optionsuri);
+      console.log(url);
+      const urls = resolveUrl(window.location.href);
+      if (baseAuthenticator.validateResponse(urls, { state })) {
+        const code = baseAuthenticator.getCodeFromURL(urls)!;
+        const tokens = await baseAuthenticator.accessToken({
+          code,
+          codeVerifier,
+          redirectUri,
+        });
+        console.log(tokens);
 
-      //   console.log(url);
-
-      //   const urls = resolveUrl(window.location.href);
-
-      //   if (validateAuthorizationResponse(urls, { state: 'sdasdasdasd' })) {
-      //     const code = getCodeFromURL(url)!;
-      //     console.log(code);
-
-      //     const req = await requestTokens('https://accounts.spotify.com', '/api/token', {
-      //       clientId: id,
-      //       clientSecret: secret,
-      //       code,
-      //       grantType: 'AUTHORIZATION',
-      //       redirectUri: 'http://localhost:5173/authorize/spotify',
-      //       codeVerifier,
-      //     });
-
-      //     console.log(req);
-
-      //     const req2 = await requestTokens('https://accounts.spotify.com', '/api/token', {
-      //       clientId: id,
-      //       clientSecret: secret,
-      //       code,
-      //       refreshToken: req.refreshToken,
-      //       grantType: 'REFRESH_TOKEN',
-      //       redirectUri: 'http://localhost:5173/authorize/spotify',
-      //       codeVerifier,
-      //     });
-
-      //     console.log(req2);
-      //   }
+        // if (tokens) {
+        //   const newTokens = await baseAuthenticator.refreshToken({
+        //     refreshToken: tokens!.refreshToken,
+        //   });
+        //   console.log(newTokens);
+        // }
+      }
     })();
 
     return () => {
