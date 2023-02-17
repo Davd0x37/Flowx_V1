@@ -2,33 +2,36 @@
 // 				  OAUTH
 // #############################
 
-export const IResponse = {
-  CODE: 'code',
-} as const;
+// export const IResponse = {
+//   CODE: 'code',
+// } as const;
 
-export const IGrant = {
-  AUTHORIZATION: 'authorization_code',
-  REFRESH_TOKEN: 'refresh_token',
-} as const;
+// export const IGrant = {
+//   AUTHORIZATION: 'authorization_code',
+//   REFRESH_TOKEN: 'refresh_token',
+// } as const;
 
-export const IAuthenticationAction = {
-  REQUEST_DATA: 'request_data',
-  REQUEST_TOKENS: 'request_tokens',
-  REFRESH_TOKENS: 'refresh_tokens',
-  AUTHENTICATE_SERVICE: 'authenticate_service',
-} as const;
+// export const IAuthenticationAction = {
+//   REQUEST_DATA: 'request_data',
+//   REQUEST_TOKENS: 'request_tokens',
+//   REFRESH_TOKENS: 'refresh_tokens',
+//   AUTHENTICATE_SERVICE: 'authenticate_service',
+// } as const;
 
-export type ResponseType = keyof typeof IResponse;
-export type GrantType = keyof typeof IGrant;
-export type AuthenticationActionType = keyof typeof IAuthenticationAction;
+// export type ResponseType = keyof typeof IResponse;
+// export type GrantType = keyof typeof IGrant;
+// export type AuthenticationActionType = keyof typeof IAuthenticationAction;
+export type ResponseType = 'code';
+export type GrantType = 'authorization_code' | 'refresh_token';
+export type AuthenticationActionType = 'request_data' | 'request_tokens' | 'refresh_tokens' | 'authenticate_service';
 export type CodeChallengeMethodType = 'S256' | 'plain';
 export type OAuthEndpoints = 'tokenEndpoint' | 'authorizeEndpoint' | 'discoveryEndpoint';
 
-export interface AuthSettings {
+export interface OAuthSettings {
   /**
    * URL of OAuth2 server
    */
-  server?: string;
+  server: string;
 
   /**
    * OAuth2 client id - required to authenticate requests with your application
@@ -58,21 +61,16 @@ export interface AuthSettings {
   discoveryEndpoint?: string;
 }
 
-export interface AuthorizeParameters {
-  /**
-   * URL of OAuth2 server
-   */
-  server: string;
-
-  /**
-   * OAuth2 client id - required to authenticate requests with your application
-   */
-  clientId: string;
-
+export interface OAuthParametersRequest {
   /**
    * Almost everywhere it is code for authorization code flow
    */
   responseType: ResponseType;
+
+  /**
+   * Defines if fetch is send to request new access tokens or refresh existing
+   */
+  grantType: GrantType;
 
   /**
    * Selected page to redirect user after authentication
@@ -80,9 +78,20 @@ export interface AuthorizeParameters {
   redirectUri: string;
 
   /**
+   * Received code from service. Needs to be send when fetching access tokens
+   */
+  code: string;
+
+  /**
+   * Used when refreshing existing access tokens
+   */
+  refreshToken: string;
+
+  /**
    * Generated nonce that will be used to verify received tokens from service
    */
   state?: string;
+  nonce?: string; // same as state - both are commonly used
 
   /**
    * List of required scopes to access data
@@ -93,7 +102,12 @@ export interface AuthorizeParameters {
    * Default true for some services
    * show window authentication to user once again if this option is set to true
    */
-  show_dialog?: boolean;
+  showDialog?: boolean;
+
+  /**
+   * Required when using PKCE flow
+   */
+  codeVerifier?: string;
 
   /**
    * Algorithm used to generate code challenge
@@ -106,43 +120,37 @@ export interface AuthorizeParameters {
   codeChallenge?: string;
 }
 
-export interface CodeChallengeStruct {
-  method: CodeChallengeMethodType;
+export type OAuthValidationParameters = Pick<OAuthParametersRequest, 'state' | 'nonce'>;
 
-  codeChallenge: string;
-}
+export type OAuthCodeChallengeStruct = Pick<OAuthParametersRequest, 'codeChallengeMethod' | 'codeChallenge'>;
 
-export interface AuthorizeResponseValidationParameters {
-  state?: string;
-}
+export type OAuthAuthorizeParameters = OAuthValidationParameters &
+  OAuthCodeChallengeStruct &
+  Required<Pick<OAuthSettings, 'server' | 'clientId'>> &
+  Pick<OAuthParametersRequest, 'responseType' | 'redirectUri' | 'scope' | 'showDialog'>;
 
-export interface AuthorizeResponseValidation {
-  code: string;
-}
+export type OAuthResponseValidation = Pick<OAuthParametersRequest, 'code'>;
+
+export type OAuthAccessTokenRequest = Required<Pick<OAuthParametersRequest, 'code' | 'redirectUri' | 'grantType'>>;
+export type OAuthAccessTokenRequestPKCE = Required<
+  { grantType: 'authorization_code' } & Pick<OAuthParametersRequest, 'code' | 'redirectUri' | 'codeVerifier'> &
+    Pick<OAuthSettings, 'clientId'>
+>;
+
+export type OAuthRefreshTokensRequest = Required<Pick<OAuthParametersRequest, 'grantType' | 'refreshToken'>>;
+export type OAuthRefreshTokensRequestPKCE = Required<
+  { grantType: 'refresh_token' } & Pick<OAuthParametersRequest, 'grantType' | 'refreshToken'> &
+    Pick<OAuthSettings, 'clientId'>
+>;
 
 export interface OAuthTokenRequest {
-  clientId: string;
-  clientSecret: string;
   grantType: GrantType;
   code: string;
   redirectUri: string;
+  clientId: string;
+  clientSecret: string;
   codeVerifier?: string;
   refreshToken?: string;
-}
-
-// // Cryptographically random string between 43 and 128 characters in length - @Spotify
-// codeVerifier: string;
-// // Code received from service after authorization - used to exchange for access token
-// code: string;
-// // Information about what token we want from the service
-// grantType: GrantType;
-
-export interface RequestTokenResponse {
-  access_token: string;
-  token_type: string;
-  scope: string;
-  expires_in: number;
-  refresh_token: string;
 }
 
 export interface OAuthTokens {
@@ -160,6 +168,14 @@ export interface OAuthTokens {
 
   // Time of recent request tokens
   dateOfLastRequest: number;
+}
+
+export interface OAuthRequestTokenResponse {
+  access_token: string;
+  token_type: string;
+  scope: string;
+  expires_in: number;
+  refresh_token: string;
 }
 
 export type RequestMethodTypes = 'POST' | 'GET' | 'UPDATE';
@@ -187,104 +203,104 @@ export interface IOnClick {
   onClick: (...args: unknown[]) => unknown;
 }
 
-export interface Notification {
-  mode: NotificationMode;
-  title: string;
-  message: string;
-}
-
-export interface Service {
-  // Service ID
-  $id: string;
-  // Service name
-  name: string;
-  // Service configuration - icon, colors etc.
-  config: {
-    // Icon name eg. lab la-brand
-    icon: string;
-    // Color used to print important labels
-    color: string;
-    // -------
-    isEnabled: boolean;
-  };
-  auth: {
-    hasRequestedTokens: boolean;
-    credentials: Pick<AuthParameters, 'authorizationUri' | 'clientId' | 'clientSecret' | 'tokenEndpointUri' | 'scope'> &
-      Partial<Pick<AuthParameters, 'redirectUri'>>;
-    // Authentication tokens
-    tokens: Tokens;
-  };
-  // Paths where runner should look for data and obtain selected
-  dataPaths: DataPath[];
-  // Received data from service
-  data: Data[];
-}
-
-export interface DataPath {
-  path: string;
-  name?: string;
-  select: Data[];
-}
-
-export interface Data {
-  label: string; // Title
-  detail: string; // Path
-  isImportant: boolean; // Is important?
-  isEnabled: boolean;
-  matcher?: Record<string, string | number | boolean>;
-  arrayLimit?: number; // Collected array limit
-}
-
-export interface RootState {
-  name: string;
-  darkMode: boolean;
-  lang: string;
-  isAuth: boolean;
-  searchBox: string;
-  encryption: {
-    passwordHash: string;
-    salt: string;
-  };
-}
-
-export interface ServiceState {
-  // Record< Service name, Service content >
-  list: Record<string, Service>;
-}
-
-export interface NotificationState {
-  list: Notification[];
-}
-
-export interface ConvertedStore {
-  store: RootState;
-  serviceStore: ServiceState;
-}
-
-// import { RouteRecordName } from 'vue-router';
-
-// export interface PlusAction {
-//   icon: string;
-//   pathName: string;
-// }
-
-// export interface Actions {
-//   icon: string;
-//   path: {
-//     name: RouteRecordName | string;
-//   };
-// }
-
-// export interface SidebarPath {
+// export interface Notification {
+//   mode: NotificationMode;
 //   title: string;
-//   icon: string;
-//   color?: string;
-//   path: {
-//     name: RouteRecordName | string;
-//     params?: Record<string, unknown>;
-//   };
-//   children?: SidebarPath[];
-//   actions?: Actions;
+//   message: string;
 // }
 
-export type NotificationMode = 'success' | 'info' | 'warning' | 'error';
+// export interface Service {
+//   // Service ID
+//   $id: string;
+//   // Service name
+//   name: string;
+//   // Service configuration - icon, colors etc.
+//   config: {
+//     // Icon name eg. lab la-brand
+//     icon: string;
+//     // Color used to print important labels
+//     color: string;
+//     // -------
+//     isEnabled: boolean;
+//   };
+//   auth: {
+//     hasRequestedTokens: boolean;
+//     credentials: Pick<AuthParameters, 'authorizationUri' | 'clientId' | 'clientSecret' | 'tokenEndpointUri' | 'scope'> &
+//       Partial<Pick<AuthParameters, 'redirectUri'>>;
+//     // Authentication tokens
+//     tokens: Tokens;
+//   };
+//   // Paths where runner should look for data and obtain selected
+//   dataPaths: DataPath[];
+//   // Received data from service
+//   data: Data[];
+// }
+
+// export interface DataPath {
+//   path: string;
+//   name?: string;
+//   select: Data[];
+// }
+
+// export interface Data {
+//   label: string; // Title
+//   detail: string; // Path
+//   isImportant: boolean; // Is important?
+//   isEnabled: boolean;
+//   matcher?: Record<string, string | number | boolean>;
+//   arrayLimit?: number; // Collected array limit
+// }
+
+// export interface RootState {
+//   name: string;
+//   darkMode: boolean;
+//   lang: string;
+//   isAuth: boolean;
+//   searchBox: string;
+//   encryption: {
+//     passwordHash: string;
+//     salt: string;
+//   };
+// }
+
+// export interface ServiceState {
+//   // Record< Service name, Service content >
+//   list: Record<string, Service>;
+// }
+
+// export interface NotificationState {
+//   list: Notification[];
+// }
+
+// export interface ConvertedStore {
+//   store: RootState;
+//   serviceStore: ServiceState;
+// }
+
+// // import { RouteRecordName } from 'vue-router';
+
+// // export interface PlusAction {
+// //   icon: string;
+// //   pathName: string;
+// // }
+
+// // export interface Actions {
+// //   icon: string;
+// //   path: {
+// //     name: RouteRecordName | string;
+// //   };
+// // }
+
+// // export interface SidebarPath {
+// //   title: string;
+// //   icon: string;
+// //   color?: string;
+// //   path: {
+// //     name: RouteRecordName | string;
+// //     params?: Record<string, unknown>;
+// //   };
+// //   children?: SidebarPath[];
+// //   actions?: Actions;
+// // }
+
+// export type NotificationMode = 'success' | 'info' | 'warning' | 'error';

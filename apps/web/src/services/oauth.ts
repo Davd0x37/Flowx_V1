@@ -1,14 +1,16 @@
 import {
-  AuthorizeParameters,
-  AuthorizeResponseValidation,
-  AuthorizeResponseValidationParameters,
   CodeChallengeMethodType,
-  CodeChallengeStruct,
-  IGrant,
-  IResponse,
+  GrantType,
+  OAuthAccessTokenRequest,
+  OAuthAccessTokenRequestPKCE,
+  OAuthAuthorizeParameters,
+  OAuthCodeChallengeStruct,
+  OAuthRefreshTokensRequestPKCE,
+  OAuthRequestTokenResponse,
+  OAuthSettings,
   OAuthTokenRequest,
   OAuthTokens,
-  RequestTokenResponse,
+  OAuthValidationParameters,
 } from '../Types';
 import { CODE_VERIFIER_LENGTH, debug } from '../helpers';
 import { base64urlencode } from '../utils';
@@ -17,27 +19,35 @@ import { resolveUrl } from '../utils/network.util';
 import { generateRandomValue, hash } from './crypto';
 import { RequestBuilder, URLBuilder } from './request.builder';
 
+function createBasicAuth(clientId: string, clientSecret: string): string {
+  return btoa(clientId + ':' + clientSecret);
+}
+
+// function resolveEndpoint(apiPath: string, server: string | URL): string | null {}
+
+// export async function generateServerConfig(options: OAuthSettings): Promise<OAuthSettings | null> {}
+
 /**
  * Generate authentication URI from passed configuration
  *
- * @param {AuthorizeParameters} options
- * @returns
+ * @param {OAuthAuthorizeParameters} options
+ * @returns {string} generated authorization URL
  */
-export function generateAuthorizeUri(options: AuthorizeParameters): string {
+export function generateAuthorizeUri(options: OAuthAuthorizeParameters): string {
   const urlBuilder = new URLBuilder(options.server);
 
   const scope = Array.isArray(options.scope) ? options.scope.join(' ') : options.scope;
 
   urlBuilder.addParameter({
     client_id: options.clientId,
-    response_type: IResponse[options.responseType],
+    response_type: options.responseType,
     redirect_uri: options.redirectUri,
     scope,
   });
 
-  if (options?.show_dialog) {
+  if (options?.showDialog) {
     urlBuilder.addParameter({
-      show_dialog: options.show_dialog + '', // XD
+      show_dialog: options.showDialog + '', // URLSearchParams accepts only string as value
     });
   }
 
@@ -57,13 +67,65 @@ export function generateAuthorizeUri(options: AuthorizeParameters): string {
   return urlBuilder.toString();
 }
 
-export function getTokensFromResponse(response: RequestTokenResponse): OAuthTokens {
+function getTokenRequestURL(
+  endpointUri: string | URL,
+  options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE
+): URLBuilder {
+  const urlBuilder = new URLBuilder(endpointUri);
+
+  switch (options.grantType) {
+    case 'authorization_code': {
+      urlBuilder.addParameter({
+        grant_type: options.grantType,
+        code: options.code,
+        redirect_uri: options.redirectUri,
+        client_id: options.clientId,
+        code_verifier: options.codeVerifier,
+      });
+
+      break;
+    }
+    case 'refresh_token': {
+      urlBuilder.addParameter({
+        grant_type: options.grantType,
+        refresh_token: options.refreshToken,
+        client_id: options.clientId,
+      });
+      break;
+    }
+    default: {
+    }
+  }
+
+  return urlBuilder;
+}
+
+function getRefreshTokenRequestURL(endpointUri: string | URL, options: OAuthRefreshTokensRequestPKCE): URLBuilder {
+  const urlBuilder = new URLBuilder(endpointUri);
+
+  urlBuilder.addParameter({
+    grant_type: options.grantType,
+    client_id: options.clientId,
+    refresh_token: options.refreshToken,
+  });
+
+  return urlBuilder;
+}
+
+// Run validateAuthorizationResponse before
+export function getCodeFromURL(url: string | URL): string | null {
+  const params = resolveUrl(url).searchParams;
+
+  return params.get('code');
+}
+
+export function getTokensFromResponse(response: OAuthRequestTokenResponse): OAuthTokens {
   return {
     accessToken: response.access_token,
     tokenType: response.token_type,
     expiresIn: response.expires_in,
     refreshToken: response.refresh_token,
-    dateOfLastRequest: Date.now(),
+    dateOfLastRequest: Date.now(), // @TODO: remove side effect?
   };
 }
 
@@ -76,7 +138,7 @@ export function generateCodeVerifier(): string {
 export async function getCodeChallenge(
   codeVerifier: string,
   codeChallengeMethod: CodeChallengeMethodType = 'S256'
-): Promise<CodeChallengeStruct> {
+): Promise<OAuthCodeChallengeStruct | null> {
   try {
     const hashedVerifier = await hash(codeVerifier);
 
@@ -84,26 +146,22 @@ export async function getCodeChallenge(
 
     return {
       codeChallenge,
-      method: codeChallengeMethod,
+      codeChallengeMethod,
     };
   } catch (error) {
-    debug(error);
-
-    throw new AppError({
+    debug({
       name: 'CODE_CHALLENGE_FAILED',
       message: `Couldn't generate code challenge, please check error cause`,
-      cause: error,
     });
+
+    return null;
   }
 }
 
 // Heavily inspired from https://github.com/badgateway/oauth2-client
 // I think this is the most beautiful and simplest form of response validation I've ever seen
 // Perfection
-export function validateAuthorizationResponse(
-  url: string | URL,
-  options?: AuthorizeResponseValidationParameters
-): AuthorizeResponseValidation {
+export function validateAuthorizationResponse(url: string | URL, options?: OAuthValidationParameters): boolean {
   const params = resolveUrl(url).searchParams;
   const error = params.get('error');
   const errorDescription = params.get('error_description');
@@ -111,81 +169,50 @@ export function validateAuthorizationResponse(
   const code = params.get('code');
 
   if (error) {
-    throw new AppError({
+    debug({
       name: 'RESPONSE_ERROR',
       message: errorDescription || 'Undefined response error',
     });
+
+    return false;
   }
 
   if (code === null) {
-    throw new AppError({
+    debug({
       name: 'CODE_NOT_FOUND',
       message: `Couldn't find 'code' in received url`,
     });
+
+    return false;
   }
 
   if (state !== null) {
     if (options?.state === undefined) {
-      throw new AppError({
+      debug({
         name: 'STATE_NOT_FOUND',
         message: `Received 'state' in response but I wasn't able to read 'state' from options parameter`,
       });
+
+      return false;
     }
 
     if (options?.state !== state) {
-      throw new AppError({
+      debug({
         name: 'STATE_MISMATCH',
         message: `State parameter from response didn't match the 'state' passed in options parameter`,
       });
+
+      return false;
     }
   }
 
-  return {
-    code,
-  };
-}
-
-// @TODO: add second parameter with grantType - override function
-function getRequestTokenURL(endpointUri: string | URL, options: OAuthTokenRequest): URLBuilder {
-  const urlBuilder = new URLBuilder(endpointUri);
-
-  urlBuilder.addParameter({
-    grant_type: IGrant[options.grantType],
-    code: options.code,
-    redirect_uri: options.redirectUri,
-  });
-
-  if (options?.codeVerifier && options.clientId) {
-    urlBuilder.addParameter({
-      client_id: options.clientId,
-      code_verifier: options.codeVerifier,
-    });
-  }
-
-  if (options?.refreshToken && options.grantType === 'REFRESH_TOKEN') {
-    urlBuilder.addParameter({
-      refresh_token: options.refreshToken,
-      client_id: options.clientId,
-    });
-  }
-
-  if (options.grantType === 'AUTHORIZATION') {
-    urlBuilder.addParameter({
-      client_id: options.clientId,
-    });
-  }
-
-  return urlBuilder;
-}
-
-function createBasicAuth(clientId: string, clientSecret: string): string {
-  return btoa(clientId + ':' + clientSecret);
+  return true;
 }
 
 export async function requestTokens(
   server: string,
   endpoint: string,
-  options: OAuthTokenRequest
+  options: OAuthAccessTokenRequestPKCE
 ): Promise<OAuthTokens> {
   const endpointUri = resolveUrl(endpoint, server);
 

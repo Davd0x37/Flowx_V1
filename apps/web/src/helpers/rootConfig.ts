@@ -15,6 +15,6 @@ export const defaultGlobal =
     ? self
     : typeof window !== 'undefined'
     ? window
-    // : typeof global !== 'undefined'
-    // ? global
-    : undefined;
+    : // : typeof global !== 'undefined'
+      // ? global
+      undefined;
