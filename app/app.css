@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Color palette */
+:root {
+  --primary: #1062ae;
+  --secondary: #8dbe7e;
+  --accent-light: #5ca6c4;
+  --accent-dark: #365a68;
+  --shade-light: #d8e9d3; /* Text color for light-on-dark (dark background) */
+  --shade-dark: #171927; /* Text color for dark-on-light (light background) */
+
+  --success: #3a986c;
+  --info: #171927;
+  --warning: #b78834;
+  --error: #f44336;
+
+  --text: #040507;
+  --text-light: rgba(255, 255, 255, 0.8);
+  --text-dark: rgba(255, 255, 255, 1);
+}
+
+/* Semantic properties */
+:root {
+  --text-color: var(--text);
+  --background-color: var(--shade-light);
+
+  --radius: 4px;
+
+  --transition-duration: 0.15s;
+  --transition-props: color, background-color;
+}
+
+:root.dark {
+  --text-color: var(--text-light);
+  --background-color: var(--shade-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: var(--text-light);
+    --background-color: var(--shade-dark);
+  }
+}
+
+html {
+  line-height: 1.6;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 10px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition-property: var(--transition-props);
+  transition-duration: var(--transition-duration);
+}
+
+
+
+#App {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  min-width: 100vw;
+  background-color: var(--shade-light);
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+#App.dark {
+  background-color: var(--shade-dark);
+}
+

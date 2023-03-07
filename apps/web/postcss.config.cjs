@@ -1,1 +1,0 @@
-module.exports = require("@flowx/ui/postcss");

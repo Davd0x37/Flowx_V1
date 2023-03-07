@@ -21,7 +21,6 @@ module.exports = {
     '^react-dom(.*)$',
     '^react-router-dom(.*)$',
     '<THIRD_PARTY_MODULES>',
-    '^@flowx/(.*)$',
     '^[./].*(?<!\\.(c|sc)ss)$',
     '(c|sc)ss$',
   ],
