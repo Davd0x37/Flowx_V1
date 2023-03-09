@@ -1,6 +1,5 @@
 mod utils;
 
-pub mod auth;
 pub mod crypto;
 
 // #[cfg(feature = "wee_alloc")]

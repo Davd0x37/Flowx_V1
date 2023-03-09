@@ -1,7 +1,7 @@
 import { MutableRefObject, useCallback, useEffect, useState } from 'react';
 
-import { internalGuard } from '../helpers';
-import { Fetch } from '../lib/Fetch';
+import { internalGuard } from '@/helpers';
+import { Fetch } from '@/lib/fetch';
 
 export interface IRequestProps {
   url: string;

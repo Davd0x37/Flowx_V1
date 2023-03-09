@@ -1,14 +1,13 @@
+/// <reference types="vitest" />
 import react from '@vitejs/plugin-react-swc';
-// import * as postcssNested from 'postcss-nested';
-// import * as postcssNested from 'postcss-nested';
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // css: {
-  //   postcss: {
-  //     plugins: [postcssNested],
-  //   },
-  // },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
 });

@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { Tab, Tabs } from '@flowx/ui';
 import '@flowx/ui/style';
 
-import { ThemeContext } from './context/ThemeContext';
+import { ThemeContext } from './context/theme-context';
 import { debug } from './helpers';
 import useDeviceColorScheme from './hooks/use-device-color-scheme';
 import {
@@ -15,7 +15,7 @@ import {
   getCodeFromURL,
   requestTokens,
   validateAuthorizationResponse,
-} from './services/oauth';
+} from './modules/auth/oauth';
 import { AppError } from './utils/error';
 import { resolveUrl } from './utils/network.util';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { defaultGlobalExist, internalGuard } from '../helpers';
+import { defaultGlobalExist, internalGuard } from '@/helpers';
 
 export type IKey = string;
 

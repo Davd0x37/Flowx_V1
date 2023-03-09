@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { internalGuard } from '../helpers';
+import { internalGuard } from '@/helpers';
 
 export default () => {
   const wnd = internalGuard('matchMedia');

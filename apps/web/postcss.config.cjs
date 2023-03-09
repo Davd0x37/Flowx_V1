@@ -1,1 +1,8 @@
-module.exports = require("@flowx/ui/postcss");
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+    'postcss-nested': {},
+    'postcss-preset-env': {},
+  },
+};

@@ -1,11 +1,14 @@
-import { internalGuard } from '../helpers';
+import { internalGuard } from '@/helpers';
+import { FetchClient } from '@/types';
 
-export const Fetch = async (url: string, options?: RequestInit): Promise<Response> => {
-  const wnd = internalGuard('fetch');
+export const Fetch: FetchClient = {
+  async fetch(input: RequestInfo | URL, options?: RequestInit): Promise<Response> {
+    const wnd = internalGuard('fetch');
 
-  try {
-    return wnd.fetch(url, options);
-  } catch (error) {
-    throw new Error(`Error occured during fetch: ${error}`);
-  }
+    try {
+      return wnd.fetch(input, options);
+    } catch (error) {
+      throw new Error(`Error occured during fetch: ${error}`);
+    }
+  },
 };

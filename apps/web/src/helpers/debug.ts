@@ -1,6 +1,5 @@
-import { BaseError } from '../utils/base-error';
-import { AppError, RuntimeAppError } from '../utils/error';
-import { isDevEnv } from './RootConfig';
+import { BaseError } from './error';
+import { isDevEnv } from './root-config';
 
 const consoleStyles = {
   groupName: `font-size: 1.3em; background: #040507; color: #f44336; padding: 3px 10px;`,
@@ -12,13 +11,13 @@ const consoleStyles = {
   },
 } as const;
 
-interface DebugErrorParams {
-  showTrace?: boolean;
-}
-
 interface DebugParams {
   name: string;
   message: string;
+}
+
+interface DebugErrorParams {
+  showTrace?: boolean;
 }
 
 function printAdditionals(params: DebugParams) {
@@ -32,7 +31,7 @@ function printAdditionals(params: DebugParams) {
 }
 
 function printErrorInstance(error: unknown, params?: DebugErrorParams) {
-  if (error instanceof BaseError || error instanceof AppError || error instanceof RuntimeAppError) {
+  if (error instanceof BaseError) {
     console.group(`%c${error.name}`, consoleStyles.groupName);
 
     if (params?.showTrace) {
@@ -62,7 +61,7 @@ export function debug(params: DebugParams) {
   }
 }
 
-export function debugErr(error: unknown, params?: DebugErrorParams) {
+export function debugError(error: unknown, params?: DebugErrorParams) {
   if (isDevEnv) {
     printErrorInstance(error, params);
   }
