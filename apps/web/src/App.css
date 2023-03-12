@@ -2,14 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Color palette */
-:root {
+/* :root {
   --primary: #1062ae;
   --secondary: #8dbe7e;
   --accent-light: #5ca6c4;
   --accent-dark: #365a68;
-  --shade-light: #d8e9d3; /* Text color for light-on-dark (dark background) */
-  --shade-dark: #171927; /* Text color for dark-on-light (light background) */
+  --shade-light: #d8e9d3;
+  --shade-dark: #171927;
 
   --success: #3a986c;
   --info: #171927;
@@ -19,12 +18,9 @@
   --text: #040507;
   --text-light: rgba(255, 255, 255, 0.8);
   --text-dark: rgba(255, 255, 255, 1);
-}
 
-/* Semantic properties */
-:root {
-  --text-color: var(--text);
-  --background-color: var(--shade-light);
+  --text-color: theme('colors.text-default');
+  --background-color: theme('colors.shade-light');
 
   --radius: 4px;
 
@@ -33,14 +29,14 @@
 }
 
 :root.dark {
-  --text-color: var(--text-light);
-  --background-color: var(--shade-dark);
+  --text-color: theme('colors.text-light');
+  --background-color: theme('colors.shade-dark');
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text-color: var(--text-light);
-    --background-color: var(--shade-dark);
+    --text-color: theme('colors.text-light');
+    --background-color: theme('colors.shade-dark');
   }
 }
 
@@ -83,4 +79,4 @@ body {
 
 #App.dark {
   background-color: var(--shade-dark);
-}
+} */

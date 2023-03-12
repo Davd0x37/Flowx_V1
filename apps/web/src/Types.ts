@@ -1,3 +1,8 @@
+export interface ResultWrapper<T> {
+  data?: T;
+  error?: unknown;
+}
+
 export interface FileReadHandlers {
   onload: (result: string, event: ProgressEvent<FileReader>) => void;
   onerror: (event: ProgressEvent<FileReader>) => void;
@@ -24,7 +29,7 @@ export interface IOnClick {
 /**
  * DEPENDENCY INVERSION TYPES/INTERFACES
  */
-export interface FetchClient {
+export interface RequestClient {
   fetch: (input: RequestInfo | URL, options?: RequestInit) => Promise<Response>;
 }
 

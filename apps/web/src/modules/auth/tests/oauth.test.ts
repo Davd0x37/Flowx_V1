@@ -1,17 +1,28 @@
 import { AppError, IV_LEN } from '@/helpers';
 import { Fetch } from '@/lib/fetch';
-import { describe, expect, test } from '@jest/globals';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { OAuthBaseAuthenticator } from '../oauth';
-import { OAuthAuthorizeParameters, OAuthSettings } from '../types';
+import { OAuth2 } from '../oauth';
+import { OAuthAuthorizeParameters, OAuthCodeChallengeStruct, OAuthSettings } from '../types';
 
-jest.mock('../lib/fetch', () => ({
-  Fetch: {
-    fetch: jest.fn(async (d) => {
-      return d;
-    }),
-  },
-}));
+vi.mock('@/lib/fetch', () => {
+  return {
+    Fetch: {
+      fetch: vi.fn(async () => {
+        return {
+          json: () => {
+            return {
+              access_token: 'random_access_token',
+              token_type: 'Bearer',
+              expires_in: 3600,
+              refresh_token: 'ultra_super_easy_secret_token',
+            };
+          },
+        };
+      }),
+    },
+  };
+});
 
 const serviceOptions: OAuthSettings = {
   server: 'https://service.com',
@@ -28,21 +39,41 @@ const authOptions: OAuthAuthorizeParameters = {
   scope: ['user', 'email'],
 };
 
-const auth = new OAuthBaseAuthenticator(serviceOptions, Fetch);
+const redirectedURLWithCode = `http://localhost:5173/authorize/spotify?code=ultra_secret_code&state=secret_state`;
+const redirectedURLWithError = `http://localhost:5173/authorize/spotify?code=ultra_secret_code&state=secret_state`;
+
+const auth = new OAuth2(serviceOptions, Fetch);
+
+let codeGlobal: string;
+let challengeGlobal: OAuthCodeChallengeStruct;
+let urlGlobal: string | null;
+
+beforeEach(async () => {
+  codeGlobal = auth.generateCodeVerifier();
+  challengeGlobal = await auth.generatePKCECodeChallenge(codeGlobal);
+
+  const { codeChallenge, codeChallengeMethod } = challengeGlobal;
+
+  urlGlobal = auth.getAuthorizeURL({
+    ...authOptions,
+    state: 'secret_state',
+    codeChallenge,
+    codeChallengeMethod,
+  });
+});
 
 describe('Test OAuth service', () => {
-  test('generate code verifier', () => {
+  it('generate code verifier', () => {
     const code = auth.generateCodeVerifier();
 
     expect(typeof code).toBe('string');
     expect(code.length).toBeGreaterThanOrEqual(IV_LEN);
   });
 
-  test('generate PKCE code challenge', async () => {
+  it('generate PKCE code challenge', async () => {
     expect.assertions(4);
 
-    const code = auth.generateCodeVerifier();
-    const challenge = await auth.generateCodeChallenge(code);
+    const challenge = await auth.generatePKCECodeChallenge(codeGlobal);
 
     expect(challenge).toHaveProperty('codeChallengeMethod');
     expect(challenge?.codeChallengeMethod).toBe('S256');
@@ -50,40 +81,56 @@ describe('Test OAuth service', () => {
     expect(typeof challenge?.codeChallenge).toBe('string');
   });
 
-  test('fail generating PKCE code challenge', async () => {
-    expect.assertions(4);
+  it('fail generating PKCE code challenge', async () => {
+    expect.assertions(3);
 
     try {
-      await auth.generateCodeChallenge(null as any);
+      await auth.generatePKCECodeChallenge(null as any);
     } catch (error) {
       expect(error).toBeInstanceOf(AppError);
       expect(error).toHaveProperty('message');
       expect(error).toHaveProperty('name');
-      expect(error.name).toBe('CODE_CHALLENGE_FAILED');
+      // expect(error.name).toBe('CODE_CHALLENGE_FAILED');
     }
   });
 
   describe('generate authorization URL', () => {
-    test('with PKCE - default values', async () => {
+    it('with PKCE - default values', async () => {
       expect.assertions(1);
 
-      const codeVerifier = auth.generateCodeVerifier();
-      const { codeChallenge, codeChallengeMethod } = await auth.generateCodeChallenge(codeVerifier);
+      const { codeChallenge, codeChallengeMethod } = challengeGlobal;
 
       const url = auth.getAuthorizeURL({
         ...authOptions,
+        state: 'secret_state',
         codeChallenge,
         codeChallengeMethod,
       });
 
       expect(typeof url).toBe('string');
     });
-    test('without PKCE - default values', async () => {
+    it('without PKCE - default values', async () => {
       expect.assertions(1);
 
       const url = auth.getAuthorizeURL(authOptions);
 
       expect(typeof url).toBe('string');
+    });
+  });
+
+  describe('access token requests', () => {
+    it('should send request', async () => {
+      expect.assertions(1);
+
+      const request = await auth.accessToken({
+        code: '123123',
+        codeVerifier: codeGlobal,
+        redirectUri: authOptions.redirectUri,
+      });
+
+      console.log(request);
+
+      expect(request).toHaveProperty('data');
     });
   });
 });

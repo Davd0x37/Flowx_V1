@@ -3,7 +3,11 @@
     "target": "ESNext",
     "module": "ESNext",
     "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "useDefineForClassFields": true,
     "moduleResolution": "node",
     "incremental": true,
@@ -21,5 +25,7 @@
     "skipLibCheck": true,
     "baseUrl": "."
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

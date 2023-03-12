@@ -1,40 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 
-import App from './app';
+import router from '@/routes';
 
-function MainBoilerplate() {
+const AppElement = document.querySelector('#app');
+
+function MainWrapper() {
   return (
-    // <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="authorize/:serviceName" element={<App />} />
-            {/* <Route path="invoices" element={<Invoices />}>
-            <Route
-              index
-              element={
-                <main style={{ padding: "1rem" }}>
-                  <p>Select an invoice</p>
-                </main>
-              }
-            />
-            <Route path=":invoiceId" element={<Invoice />} />
-          </Route> */}
-            <Route
-              path="*"
-              element={
-                <main style={{ padding: '1rem' }}>
-                  <p>There is nothing here!</p>
-                </main>
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    // {/* </React.StrictMode> */}
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(MainBoilerplate());
+ReactDOM.createRoot(AppElement!).render(MainWrapper());

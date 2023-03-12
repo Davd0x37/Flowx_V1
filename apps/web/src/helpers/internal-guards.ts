@@ -1,4 +1,4 @@
-import { RUNTIME_ERRORS, RuntimeAppError } from './error';
+import { RuntimeAppError } from './error';
 import { defaultGlobal } from './root-config';
 
 /**
@@ -16,37 +16,30 @@ export const isSupported = <T extends object>(fun: string, container: T): boolea
  *
  * @template T
  * @param {T} expr Expression to check
- * @param {RUNTIME_ERRORS} [name] Exception name
- * @param {string} [message] Exception message
- * @param {unknown} [cause] Detailed explanation of error
- * @return {NonNullable<T>} {asserts} Return unwrapped value if not thrown
+ * @param {RuntimeAppError} [error] Error instance
+ * @return {NonNullable<T>} {asserts} Returns unwrapped value
  */
-export function assert<T>(
-  expr: T,
-  name: RUNTIME_ERRORS,
-  message: string,
-  cause?: unknown
-): asserts expr is NonNullable<T> {
-  if (!expr)
-    throw new RuntimeAppError({
-      name,
-      message,
-      cause,
-    });
+function assert<T>(expr: T, error: RuntimeAppError): asserts expr is NonNullable<T> {
+  if (!expr) throw error;
 }
 
 /**
  * Returns global container (window, self, global etc.) if requested functionality is available
  *
  * @throws Throws error if global container is not available
- * @return Window | globalThis | self | global
+ * @return NonNullable<typeof defaultGlobal>
  */
 export const defaultGlobalExist = (): NonNullable<typeof defaultGlobal> => {
   const defaultGlobalRef = defaultGlobal;
 
-  assert(defaultGlobalRef, 'GLOBAL_HANDLER_NOT_AVAILABLE', 'Global / Window not available!', {
-    code: 'Requested "Global / Window" handler is not available in current runtime',
-  });
+  assert(
+    defaultGlobalRef,
+
+    new RuntimeAppError({
+      name: 'GLOBAL_HANDLER_NOT_AVAILABLE',
+      message: 'Requested "Global / Window" handler is not available in current runtime!',
+    })
+  );
 
   return defaultGlobalRef;
 };
@@ -61,9 +54,14 @@ export const defaultGlobalExist = (): NonNullable<typeof defaultGlobal> => {
 export const internalGuard = (fun: string): NonNullable<typeof defaultGlobal> => {
   const defaultGlobalRef = defaultGlobalExist();
 
-  assert(isSupported(fun, defaultGlobalRef), 'RUNTIME_FUNCTION_NOT_AVAILABLE', `${fun} is not availbalbe`, {
-    code: `Requested "${fun}" is not available in current runtime!`,
-  });
+  assert(
+    isSupported(fun, defaultGlobalRef),
+
+    new RuntimeAppError({
+      name: 'RUNTIME_FUNCTION_NOT_AVAILABLE',
+      message: `Requested "${fun}" is not available in current runtime!`,
+    })
+  );
 
   return defaultGlobalRef;
 };

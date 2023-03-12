@@ -4,18 +4,9 @@ module.exports = {
   semi: true,
   singleQuote: true,
   tabWidth: 2,
+  useTabs: false,
   proseWrap: 'never',
-  plugins: [require('@trivago/prettier-plugin-sort-imports')],
-  overrides: [
-    {
-      files: '*.scss',
-      options: {
-        tabWidth: 2,
-        useTabs: true,
-        singleQuote: true,
-      },
-    },
-  ],
+  plugins: [require('@trivago/prettier-plugin-sort-imports'), require('prettier-plugin-tailwindcss')],
   importOrder: [
     '^react(.*)$',
     '^react-dom(.*)$',

@@ -5,12 +5,13 @@
   "scripts": {
     "lint": "eslint",
     "format": "prettier --config .prettierrc.js --write \"**/*.{ts,tsx,html,scss,json,yml,md}\"",
-    "web:dev": "pnpm run -w web dev"
+    "web:dev": "pnpm run --filter web dev"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "eslint": "^8.34.0",
     "prettier": "^2.8.4",
+    "prettier-plugin-tailwindcss": "^0.2.4",
     "typescript": "^4.9.5"
   }
 }

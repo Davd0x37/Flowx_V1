@@ -1,7 +1,7 @@
 import { AppError, CODE_VERIFIER_LENGTH, base64urlencode, debug, resolveUrl } from '@/helpers';
 import { RequestBuilder, URLBuilder } from '@/helpers/builders';
 import { generateRandomValue, hash } from '@/modules/crypto';
-import type { FetchClient } from '@/types';
+import type { RequestClient, ResultWrapper } from '@/types';
 
 import type {
   CodeChallengeMethodType,
@@ -18,122 +18,231 @@ import type {
 
 // https://github.com/panva/oauth4webapi/blob/main/src/index.ts
 
-// return fetch(url.href, {
-//   headers,
-//   method: 'GET',
-//   redirect: 'manual',
-//   signal: options?.signal ? signal(options.signal) : null,
-// }).then(processDpopNonce)
+export class OAuth2 {
+  private settings: OAuthSettings;
+  private reqClient: RequestClient;
 
-const DEFAULT_ENDPOINTS: Record<OAuthEndpoints, string> = {
-  authorizationEndpoint: '/authorize',
-  tokenEndpoint: '/api/token',
-  discoveryEndpoint: '/.well-known/openid-configuration',
-  // discoveryEndpoint: '/.well-known/oauth-authorization-server',
-};
+  private defaultEndpoints: Record<OAuthEndpoints, string> = {
+    authorizationEndpoint: '/authorize',
+    tokenEndpoint: '/api/token',
+    discoveryEndpoint: '/.well-known/oauth-authorization-server',
+    // discoveryEndpoint: '/.well-known/openid-configuration',
+  };
 
-export const getEndpoint = (
-  hostname: string,
-  endpoint: OAuthEndpoints,
-  endpointRecord?: Record<OAuthEndpoints, string>
-): URL | string => {
-  if (endpointRecord && endpoint in endpointRecord) {
-    return resolveUrl(endpointRecord[endpoint], hostname);
-  }
+  constructor(settings: OAuthSettings, reqClient: RequestClient) {
+    this.settings = settings;
+    this.reqClient = reqClient;
 
-  if (endpoint in DEFAULT_ENDPOINTS) {
-    return resolveUrl(DEFAULT_ENDPOINTS[endpoint], hostname);
-  }
-
-  // return null;
-
-  // Since we have defaultEndpoints to all possible values
-  // we could return null but endpoint type restricts possible values and only
-  // way to bypass this is to pass value as 'any' type
-  throw new AppError({
-    name: 'ENDPOINT_NOT_FOUND',
-    message: `Endpoint not existent, please pass valid one`,
-  });
-};
-
-/**
- * Generate authentication URI from passed configuration
- *
- * @param {OAuthAuthorizeParameters} options
- * @returns {string} generated authorization URL
- */
-export const getAuthorizeURL = (options: OAuthAuthorizeParameters): string => {
-  const scope = Array.isArray(options.scope) ? options.scope.join(' ') : options.scope;
-
-  const endpoint = getEndpoint(options.server, 'authorizationEndpoint');
-
-  const urlBuilder = new URLBuilder(endpoint, {
-    client_id: options.clientId,
-    response_type: options.responseType,
-    redirect_uri: options.redirectUri,
-    scope,
-  });
-
-  if (options?.showDialog) {
-    urlBuilder.addParameters({
-      show_dialog: options.showDialog + '', // URLSearchParams accepts only string as value
-    });
-  }
-
-  if (options?.state) {
-    urlBuilder.addParameters({
-      state: options.state,
-    });
-  }
-
-  if (options?.codeChallengeMethod && options?.codeChallenge) {
-    urlBuilder.addParameters({
-      code_challenge: options.codeChallenge,
-      code_challenge_method: options.codeChallengeMethod,
-    });
-  }
-
-  return urlBuilder.toString();
-};
-
-export const getTokenRequestURLBuilder = (
-  endpoint: URL | string,
-  options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE
-): URLBuilder => {
-  const urlBuilder = new URLBuilder(endpoint, {
-    client_id: this.settings.clientId,
-  });
-
-  switch (options.grantType) {
-    case 'authorization_code': {
-      urlBuilder.addParameters({
-        grant_type: options.grantType,
-        code: options.code,
-        redirect_uri: options.redirectUri,
-        code_verifier: options.codeVerifier,
-      });
-
-      break;
-    }
-    case 'refresh_token': {
-      urlBuilder.addParameters({
-        grant_type: options.grantType,
-        refresh_token: options.refreshToken,
-      });
-      break;
+    if (!settings?.authorizationEndpoint && !settings.discoveryEndpoint) {
+      this.discover();
     }
   }
 
-  return urlBuilder;
-};
+  private getBasicAuthToken(): string | null {
+    if (!this.settings?.clientSecret) return null;
 
-export class OAuthBaseAuthenticator {
-  private async discover() {
+    return btoa(this.settings.clientId + ':' + this.settings.clientSecret);
+  }
+
+  // Run validateAuthorizationResponse before
+  public getCodeFromURL(url: URL | string): string | null {
+    const params = resolveUrl(url).searchParams;
+
+    return params.get('code');
+  }
+
+  public getTokensFromResponse(response: OAuthRequestTokenResponse): OAuthTokens {
+    return {
+      accessToken: response.access_token,
+      tokenType: response.token_type,
+      expiresIn: response.expires_in,
+      refreshToken: response.refresh_token,
+      dateOfLastRequest: Date.now(), // @TODO: remove side effect?
+    };
+  }
+
+  public generateCodeVerifier(): string {
+    const randomValue = generateRandomValue(CODE_VERIFIER_LENGTH);
+
+    return base64urlencode(randomValue);
+  }
+
+  public async generatePKCECodeChallenge(
+    codeVerifier: string,
+    codeChallengeMethod: CodeChallengeMethodType = 'S256'
+  ): Promise<OAuthCodeChallengeStruct> {
     try {
-      const endpoint = this.getEndpoint('discoveryEndpoint');
-      console.log(endpoint.toString());
+      const hashedVerifier = await hash(codeVerifier);
 
-      const response = await this.fetchClient.fetch(endpoint, {
+      const codeChallenge = base64urlencode(hashedVerifier);
+
+      return {
+        codeChallenge,
+        codeChallengeMethod,
+      };
+    } catch (error) {
+      const message =
+        error instanceof Error ? error?.message : `Couldn't generate code challenge, please check error message`;
+
+      throw new AppError({
+        name: 'CODE_CHALLENGE_FAILED',
+        message,
+        cause: error,
+      });
+    }
+  }
+
+  private getEndpoint(endpoint: OAuthEndpoints): URL | string {
+    const { server } = this.settings;
+
+    if (endpoint in this.settings) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return resolveUrl(this.settings[endpoint]!, server);
+    }
+
+    if (endpoint in this.defaultEndpoints) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return resolveUrl(this.defaultEndpoints[endpoint]!, server);
+    }
+
+    // Since we have defaultEndpoints to all possible values
+    // we could return null but endpoint type restricts possible values and only
+    // way to bypass this is to pass value as 'any' type
+    throw new AppError({
+      name: 'ENDPOINT_NOT_FOUND',
+      message: `Please pass valid endpoint`,
+    });
+  }
+
+  /**
+   * Generate authentication URI from passed configuration
+   *
+   * @param {OAuthAuthorizeParameters} options
+   * @returns {string} generated authorization URL
+   */
+  public getAuthorizeURL(options: OAuthAuthorizeParameters): string | null {
+    const scope = Array.isArray(options.scope) ? options.scope.join(' ') : options.scope;
+    const { clientId } = this.settings;
+
+    const endpoint = this.getEndpoint('authorizationEndpoint');
+
+    const urlBuilder = new URLBuilder(endpoint, {
+      client_id: clientId,
+      response_type: options.responseType,
+      redirect_uri: options.redirectUri,
+      scope,
+    });
+
+    if (options?.showDialog) {
+      urlBuilder.addParameters({
+        show_dialog: options.showDialog + '', // URLSearchParams accepts only string as value
+      });
+    }
+
+    if (options?.state) {
+      urlBuilder.addParameters({
+        state: options.state,
+      });
+    }
+
+    if (options?.codeChallengeMethod && options?.codeChallenge) {
+      urlBuilder.addParameters({
+        code_challenge: options.codeChallenge,
+        code_challenge_method: options.codeChallengeMethod,
+      });
+    }
+
+    return urlBuilder.toString();
+  }
+
+  public getTokenRequestURLBuilder(
+    endpoint: URL | string,
+    options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE
+  ): URLBuilder {
+    const urlBuilder = new URLBuilder(endpoint, {
+      client_id: this.settings.clientId,
+    });
+
+    switch (options.grantType) {
+      case 'authorization_code': {
+        urlBuilder.addParameters({
+          grant_type: options.grantType,
+          code: options.code,
+          redirect_uri: options.redirectUri,
+          code_verifier: options.codeVerifier,
+        });
+
+        break;
+      }
+      case 'refresh_token': {
+        urlBuilder.addParameters({
+          grant_type: options.grantType,
+          refresh_token: options.refreshToken,
+        });
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
+
+    return urlBuilder;
+  }
+
+  public validate(url: URL | string, options?: OAuthValidationParameters): boolean {
+    const params = resolveUrl(url).searchParams;
+    const error = params.get('error');
+    const errorDescription = params.get('error_description');
+    const state = params.get('state');
+    const code = params.get('code');
+
+    if (error) {
+      debug({
+        name: 'RESPONSE_ERROR',
+        message: errorDescription || 'Undefined response error',
+      });
+
+      return false;
+    }
+
+    if (code === null) {
+      debug({
+        name: 'CODE_NOT_FOUND',
+        message: `Couldn't find 'code' in received url`,
+      });
+
+      return false;
+    }
+
+    if (state !== null) {
+      if (options?.state === undefined) {
+        debug({
+          name: 'STATE_NOT_FOUND',
+          message: `Received 'state' in response but I wasn't able to read 'state' from options parameter`,
+        });
+
+        return false;
+      }
+
+      if (options?.state !== state) {
+        debug({
+          name: 'STATE_MISMATCH',
+          message: `State parameter from response didn't match the 'state' passed in options parameter`,
+        });
+
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private async discover() {
+    const endpoint = this.getEndpoint('discoveryEndpoint');
+
+    try {
+      const response = await this.reqClient.fetch(endpoint, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -141,13 +250,13 @@ export class OAuthBaseAuthenticator {
         mode: 'no-cors',
       });
 
-      console.log(response);
-
       if (!response.headers.get('Content-Type')?.startsWith('application/json')) {
-        throw new AppError({
+        debug({
           name: 'DISCOVERY_CONTENT_TYPE_ERROR',
           message: `Received response was not JSON response`,
         });
+
+        return;
       }
 
       const responseJson = await response.json();
@@ -156,35 +265,43 @@ export class OAuthBaseAuthenticator {
     } catch (error) {
       const message = error instanceof Error ? error.message : `OpenID discovery fetch failed`;
 
-      throw new AppError({
+      debug({
         name: 'DISCOVERY_CONFIGURATION_ERROR',
         message,
-        cause: error,
       });
     }
   }
 
-  public async accessToken(options: Omit<OAuthAccessTokenRequestPKCE, 'grantType'>): Promise<OAuthTokens | null> {
-    return this.request('tokenEndpoint', { ...options, grantType: 'authorization_code' });
+  public async accessToken(
+    options: Omit<OAuthAccessTokenRequestPKCE, 'grantType'>
+  ): Promise<ResultWrapper<OAuthTokens>> {
+    return this.__request('tokenEndpoint', { ...options, grantType: 'authorization_code' });
   }
 
-  public async refreshToken(options: Omit<OAuthRefreshTokensRequestPKCE, 'grantType'>): Promise<OAuthTokens | null> {
-    return this.request('tokenEndpoint', { ...options, grantType: 'refresh_token' });
+  public async refreshToken(
+    options: Omit<OAuthRefreshTokensRequestPKCE, 'grantType'>
+  ): Promise<ResultWrapper<OAuthTokens>> {
+    return this.__request('tokenEndpoint', { ...options, grantType: 'refresh_token' });
   }
 
-  private async request(
+  private async __request(
     endpoint: OAuthEndpoints,
     // make union of possible options
     options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE
-  ): Promise<OAuthTokens> {
+  ): Promise<ResultWrapper<OAuthTokens>> {
     const endpointUri = this.getEndpoint(endpoint);
     const basicAuth = this.getBasicAuthToken();
 
     if (basicAuth === null) {
-      throw new AppError({
+      const message = `Client secret not provided`;
+      debug({
         name: 'BASIC_AUTH_CONFIGURATION_ERROR',
-        message: `Client secret not provided`,
+        message,
       });
+
+      return {
+        error: message,
+      };
     }
 
     const requestTokenURL = this.getTokenRequestURLBuilder(endpointUri, options);
@@ -202,7 +319,7 @@ export class OAuthBaseAuthenticator {
     const requestInstance = requestBuilder.getRequest();
 
     try {
-      const request = await this.fetchClient.fetch(requestInstance);
+      const request = await this.reqClient.fetch(requestInstance);
       const response = await request.json();
 
       if (response?.error) {
@@ -212,124 +329,41 @@ export class OAuthBaseAuthenticator {
           message += ` | ${response.error_description}`;
         }
 
-        throw new AppError({
+        debug({
           name: 'TOKEN_REQUEST_ERROR',
           message,
         });
+
+        return {
+          error: message,
+        };
       } else if (request.status === 401) {
-        throw new AppError({
+        const message = `OAuth received error. Check your clientId or clientSecret`;
+
+        debug({
           name: 'TOKEN_REQUEST_CREDENTIALS_ERROR',
-          message: `OAuth received error. Check your clientId or clientSecret`,
+          message,
         });
+
+        return {
+          error: message,
+        };
       }
 
-      return this.getTokensFromResponse(response);
+      return {
+        data: this.getTokensFromResponse(response),
+      };
     } catch (error) {
       const message = error instanceof Error ? error.message : `Couldn't send request to service`;
 
-      throw new AppError({
+      debug({
         name: 'TOKEN_REQUEST_UNKNOWN_ERROR',
         message,
       });
+
+      return {
+        error: message,
+      };
     }
   }
 }
-
-export const getBasicAuthToken = (clientId: string, clientSecret: string): string => {
-  return btoa(clientId + ':' + clientSecret);
-};
-
-export const getCodeFromURL = (url: URL | string): string | null => {
-  const params = resolveUrl(url).searchParams;
-
-  return params.get('code');
-};
-
-export const getTokensFromResponse = (response: OAuthRequestTokenResponse): OAuthTokens => {
-  return {
-    accessToken: response.access_token,
-    tokenType: response.token_type,
-    expiresIn: response.expires_in,
-    refreshToken: response.refresh_token,
-    dateOfLastRequest: Date.now(), // @TODO: remove side effect?
-  };
-};
-
-export const generateCodeVerifier = (): string => {
-  const randomValue = generateRandomValue(CODE_VERIFIER_LENGTH);
-
-  return base64urlencode(randomValue);
-};
-
-export const generateCodeChallenge = async (
-  codeVerifier: string,
-  codeChallengeMethod: CodeChallengeMethodType = 'S256'
-): Promise<OAuthCodeChallengeStruct> => {
-  try {
-    const hashedVerifier = await hash(codeVerifier);
-
-    const codeChallenge = base64urlencode(hashedVerifier);
-
-    return {
-      codeChallenge,
-      codeChallengeMethod,
-    };
-  } catch (error) {
-    const message =
-      error instanceof Error ? error?.message : `Couldn't generate code challenge, please check error cause`;
-
-    throw new AppError({
-      name: 'CODE_CHALLENGE_FAILED',
-      message,
-      cause: error,
-    });
-  }
-};
-
-export const validateResponse = (url: URL | string, options?: OAuthValidationParameters): boolean => {
-  const params = resolveUrl(url).searchParams;
-  const error = params.get('error');
-  const errorDescription = params.get('error_description');
-  const state = params.get('state');
-  const code = params.get('code');
-
-  if (error) {
-    debug({
-      name: 'RESPONSE_ERROR',
-      message: errorDescription || 'Undefined response error',
-    });
-
-    return false;
-  }
-
-  if (code === null) {
-    debug({
-      name: 'CODE_NOT_FOUND',
-      message: `Couldn't find 'code' in received url`,
-    });
-
-    return false;
-  }
-
-  if (state !== null) {
-    if (options?.state === undefined) {
-      debug({
-        name: 'STATE_NOT_FOUND',
-        message: `Received 'state' in response but I wasn't able to read 'state' from options parameter`,
-      });
-
-      return false;
-    }
-
-    if (options?.state !== state) {
-      debug({
-        name: 'STATE_MISMATCH',
-        message: `State parameter from response didn't match the 'state' passed in options parameter`,
-      });
-
-      return false;
-    }
-  }
-
-  return true;
-};
