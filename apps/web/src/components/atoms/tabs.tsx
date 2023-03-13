@@ -1,7 +1,5 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import css from './tabs.module.css';
-
 export type TabID = number;
 export interface ITabType {
   title: string;
@@ -16,7 +14,7 @@ export interface ITabsProps {
 }
 
 export const Tab = ({ children }: PropsWithChildren & ITabProps) => {
-  return <div className={css.tab}>{children}</div>;
+  return <div className="p-2">{children}</div>;
 };
 
 export const Tabs = ({ children, onTabChange }: PropsWithChildren & ITabsProps) => {
@@ -46,17 +44,22 @@ export const Tabs = ({ children, onTabChange }: PropsWithChildren & ITabsProps) 
   };
 
   return (
-    <div className={css.tabs}>
-      <span>active: {activeTab}</span>
-      <div className={css.tabs__header}>
+    <div className="container p-4">
+      <div className="flex snap-x snap-mandatory flex-nowrap gap-4 overflow-x-auto">
         {tabsList.map(({ title }, idx) => (
-          <span className={css.tabs__title} key={idx} onClick={() => changeTab(idx)}>
+          <span
+            className="bg-shade-dark border-shade-light hover:bg-shade-light hover:text-color-default container relative top-px w-20 min-w-fit max-w-fit cursor-pointer snap-center rounded rounded-b-none border border-b-0 p-2 text-center transition"
+            key={idx}
+            onClick={() => changeTab(idx)}
+          >
             {title}
           </span>
         ))}
       </div>
 
-      <div className={css.tabs__wrapper}>{tabs.filter((_, idx) => idx === activeTab)}</div>
+      <div className="bg-shade-dark border-shade-light rounded rounded-t-none border">
+        {tabs.filter((_, idx) => idx === activeTab)}
+      </div>
     </div>
   );
 };

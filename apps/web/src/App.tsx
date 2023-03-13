@@ -1,4 +1,5 @@
-import './app.css';
+import { Button, Tab, Tabs } from './components/atoms';
+import { DefaultLayout } from './layouts';
 
 /**
  * Handle internalGuard here and display appropriate modal
@@ -8,11 +9,22 @@ import './app.css';
  */
 export default function App() {
   return (
-    <div
-      id="App"
-      className="text-color-default dark:text-color-dark bg-shade-light dark:bg-shade-dark h-screen w-screen font-sans text-base antialiased transition-colors"
-    >
-      <div>asda</div>
-    </div>
+    <DefaultLayout>
+      <main>
+        <Tabs>
+          <Tab title="xd">
+            <div>
+              <Button>click me</Button>
+            </div>
+          </Tab>
+          <Tab title="123123123123123">123123123</Tab>
+          <Tab title="123123123123123">123123123</Tab>
+          <Tab title="123123123123123">123123123</Tab>
+          <Tab title="123123123123123">123123123</Tab>
+          <Tab title="123123123123123">123123</Tab>
+          <Tab title="123123123123123">12312323</Tab>
+        </Tabs>
+      </main>
+    </DefaultLayout>
   );
 }
