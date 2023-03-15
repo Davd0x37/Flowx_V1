@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "eslint",
     "format": "prettier --config .prettierrc.js --write \"**/*.{ts,tsx,html,scss,json,yml,md}\"",
-    "web:dev": "pnpm run --filter web dev"
+    "web:dev": "pnpm run --filter web dev",
+    "web:test": "pnpm run --filter web test"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",

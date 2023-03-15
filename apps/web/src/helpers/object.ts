@@ -8,7 +8,7 @@ export const Obj = {
 
     if (parsed.length == 0) return null;
     if (isArrElem !== null) return input[isArrElem];
-    if (!input.hasOwnProperty(el)) return null;
+    if (!(el in input)) return null;
     if (parsed.length == 1) return input[el];
 
     const nested = input[el] as Record<string | number | symbol, unknown>;

@@ -1,15 +1,8 @@
-export const runAsync = async (fn: Function, finallyCb?: Function) => {
-  try {
-    const res = await fn();
+const timerAsync = (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 
-    return {
-      data: res,
-    };
-  } catch (err) {
-    return {
-      error: err,
-    };
-  } finally {
-    finallyCb?.();
-  }
+export const wait = async (time: number): Promise<void> => {
+  await timerAsync(time);
 };

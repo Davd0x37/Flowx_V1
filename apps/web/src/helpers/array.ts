@@ -1,3 +1,3 @@
-// export const excludeFromArrayByValue = <T>(item: T | T[]) => {
-//   (arrayItem: T) => (Array.isArray(item) ? !item.includes(arrayItem) : item !== arrayItem);
-// };
+export const excludeFromArrayByValue = <T>(item: T | T[]) => {
+  return (arrayItem: T) => (Array.isArray(item) ? !item.includes(arrayItem) : item !== arrayItem);
+};
