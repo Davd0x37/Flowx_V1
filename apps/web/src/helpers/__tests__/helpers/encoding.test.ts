@@ -1,0 +1,32 @@
+import * as encoding from '@/helpers/encoding';
+import { describe, expect, it } from 'vitest';
+
+const exampleText = 'text_to_encode';
+
+describe('Test encoding helpers', () => {
+  it('should convert string to array buffer', () => {
+    const ABString = encoding.stringToArrayBuffer(exampleText);
+
+    expect(ABString).toBeInstanceOf(Uint8Array);
+    expect(ABString).not.toBeTypeOf('string');
+  });
+
+  it('should convert array buffer to string', () => {
+    const ABString = encoding.stringToArrayBuffer(exampleText);
+    const ABtoString = encoding.arrayBufferToString(ABString);
+
+    expect(ABString).toBeInstanceOf(Uint8Array);
+    expect(ABtoString).toBeTypeOf('string');
+    expect(ABtoString).toMatch(exampleText);
+  });
+
+  it('encode string to base64url', () => {
+    const ABString = encoding.stringToArrayBuffer(exampleText);
+    const encoded = encoding.base64urlencode(ABString);
+
+    expect(encoded).not.toBeInstanceOf(Uint8Array);
+    expect(encoded).toBeTypeOf('string');
+  });
+});
+
+export {};

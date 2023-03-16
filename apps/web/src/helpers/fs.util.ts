@@ -4,7 +4,6 @@ export const readFile = (file: File, handlers: FileReadHandlers): void => {
   const reader = new FileReader();
 
   reader.onload = function onload(event) {
-    // Because of readAsText - line 15
     handlers.onload(reader.result as string, event);
   };
 

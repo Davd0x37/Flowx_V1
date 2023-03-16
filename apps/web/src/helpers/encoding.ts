@@ -8,18 +8,18 @@ export const base64urlencode = (input: ArrayBuffer): string =>
     .replace(/=+$/, '');
 
 /**
- * Return string input as ArrayBuffer
+ * Return string input as Uint8Array
  *
  * @param {string} str String to encode
- * @return {*}  {ArrayBuffer} Encoded string
+ * @return {Uint8Array} Encoded string
  */
-export const stringToArrayBuffer = (str: string): ArrayBuffer => new TextEncoder().encode(str);
+export const stringToArrayBuffer = (str: string): Uint8Array => new TextEncoder().encode(str);
 
 /**
  * Decode ArrayBuffer as string
  *
- * @param {ArrayBuffer} ab
- * @return {*}  {string} Decoded array
+ * @param {BufferSource} ab
+ * @return {string} Decoded array
  */
-export const arrayBufferToString = (ab: ArrayBuffer, encoding = 'utf-8'): string =>
+export const arrayBufferToString = (ab: BufferSource, encoding = 'utf-8'): string =>
   new TextDecoder(encoding).decode(ab);
