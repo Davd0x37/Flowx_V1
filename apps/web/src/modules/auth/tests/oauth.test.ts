@@ -15,7 +15,7 @@ vi.mock('@/lib/fetch', () => {
               access_token: 'random_access_token',
               token_type: 'Bearer',
               expires_in: 3600,
-              refresh_token: 'ultra_super_easy_secret_token',
+              refresh_token: 'secret_token',
             };
           },
         };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { defaultGlobalExist, internalGuard } from '@/helpers';
+import { internalGuard } from '@/helpers';
 
 export type IKey = string;
 
@@ -32,8 +32,6 @@ const setItem = (key: IKey, val: string, storageType: StorageType) => {
 };
 
 export default (key: IKey, value: unknown, storageType: StorageType = StorageType.LOCAL) => {
-  defaultGlobalExist();
-
   const [storedValue, setStoredValue] = useState(() => {
     const item = getItem(key, storageType);
 

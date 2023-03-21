@@ -1,7 +1,7 @@
-export const isDevEnv = true;
-
 export const isBrowser = typeof window !== 'undefined';
-// export const isNode = typeof process === 'object';
+export const isNode = typeof process === 'object';
+
+export const isDevEnv = (isBrowser && import.meta.env.VITE_DEV_ENV) || (isNode && process.env.DEV_ENV);
 
 export const defaultWindow = isBrowser ? window : undefined;
 export const defaultDocument = isBrowser ? window.document : undefined;

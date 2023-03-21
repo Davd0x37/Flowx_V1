@@ -20,9 +20,16 @@ describe('Test encoding helpers', () => {
     expect(ABtoString).toMatch(exampleText);
   });
 
-  it('encode string to base64url', () => {
+  it('encode array buffer to base64url', () => {
     const ABString = encoding.stringToArrayBuffer(exampleText);
-    const encoded = encoding.base64urlencode(ABString);
+    const encoded = encoding.base64UrlEncodeAB(ABString);
+
+    expect(encoded).not.toBeInstanceOf(Uint8Array);
+    expect(encoded).toBeTypeOf('string');
+  });
+
+  it('encode string to base64url', () => {
+    const encoded = encoding.base64UrlEncode(exampleText);
 
     expect(encoded).not.toBeInstanceOf(Uint8Array);
     expect(encoded).toBeTypeOf('string');

@@ -65,7 +65,7 @@ fn test_derive_key() {
     use crate::crypto::deriv_key::DerivKey;
 
     let password = "secretP44sw0rd";
-    let mut derived_key = DerivKey::derive_key(&password);
+    let mut derived_key = DerivKey::derive_key(&password, None);
 
     let message = "SOME MESSAGE";
 

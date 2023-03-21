@@ -1,5 +1,5 @@
 use argon2::{
-    password_hash::{rand_core::OsRng, PasswordHasher, PasswordVerifier, SaltString},
+    password_hash::{rand_core::OsRng, PasswordHasher, PasswordVerifier, Salt, SaltString},
     Argon2, PasswordHash,
 };
 use hex::ToHex;
@@ -8,19 +8,23 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Debug, Clone)]
 pub struct DerivKey {
-    raw: String,
+    raw_hash: String,
     hash: String,
     salt: String,
 }
 
 #[wasm_bindgen]
 impl DerivKey {
-    pub fn new(raw: String, hash: String, salt: String) -> Self {
-        Self { raw, hash, salt }
+    pub fn new(raw_hash: String, hash: String, salt: String) -> Self {
+        Self {
+            raw_hash,
+            hash,
+            salt,
+        }
     }
 
-    pub fn get_raw(&mut self) -> String {
-        self.raw.clone()
+    pub fn get_raw_hash(&mut self) -> String {
+        self.raw_hash.clone()
     }
 
     pub fn get_hash(&mut self) -> String {
@@ -31,12 +35,18 @@ impl DerivKey {
         self.salt.clone()
     }
 
-    pub fn derive_key(input: &str) -> Self {
-        let salt = SaltString::generate(&mut OsRng);
+    pub fn derive_key(input: &str, salt: Option<String>) -> Self {
+        let rng_val = SaltString::generate(&mut OsRng);
+
+        let salt = match &salt {
+            Some(val) => Salt::from_b64(val.as_str()).expect("Failed creating salt"),
+            None => rng_val.as_salt(),
+        };
+
         let argon2 = Argon2::default();
 
         let raw_hash = argon2
-            .hash_password(input.as_bytes(), &salt)
+            .hash_password(input.as_bytes(), salt)
             .expect("Invalid input key");
 
         let hash = raw_hash
@@ -65,8 +75,8 @@ impl DerivKey {
 #[test]
 fn test_derive_key() {
     let password = "secretP44sw0rd";
-    let mut derived_key = DerivKey::derive_key(&password);
+    let mut derived_key = DerivKey::derive_key(&password, None);
 
-    let raw = derived_key.get_raw();
-    assert!(DerivKey::verify_key(&password, &raw));
+    let raw_hash = derived_key.get_raw();
+    assert!(DerivKey::verify_key(&password, &raw_hash));
 }

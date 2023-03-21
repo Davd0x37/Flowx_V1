@@ -1,5 +1,4 @@
-import { Button, Tab, Tabs } from './components/atoms';
-import { DefaultLayout } from './layouts';
+import { DefaultLayout } from '@/layouts';
 
 /**
  * Handle internalGuard here and display appropriate modal
@@ -10,21 +9,7 @@ import { DefaultLayout } from './layouts';
 export default function App() {
   return (
     <DefaultLayout>
-      <main>
-        <Tabs>
-          <Tab title="xd">
-            <div>
-              <Button>click me</Button>
-            </div>
-          </Tab>
-          <Tab title="123123123123123">123123123</Tab>
-          <Tab title="123123123123123">123123123</Tab>
-          <Tab title="123123123123123">123123123</Tab>
-          <Tab title="123123123123123">123123123</Tab>
-          <Tab title="123123123123123">123123</Tab>
-          <Tab title="123123123123123">12312323</Tab>
-        </Tabs>
-      </main>
+      <main></main>
     </DefaultLayout>
   );
 }

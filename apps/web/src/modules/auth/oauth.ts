@@ -1,4 +1,4 @@
-import { AppError, CODE_VERIFIER_LENGTH, base64urlencode, debug, resolveUrl } from '@/helpers';
+import { AppError, CODE_VERIFIER_LENGTH, base64UrlEncodeAB, debug, resolveUrl } from '@/helpers';
 import { RequestBuilder, URLBuilder } from '@/helpers/builders';
 import { generateRandomValue, hash } from '@/modules/crypto';
 import type { RequestClient, ResultWrapper } from '@/types';
@@ -64,7 +64,7 @@ export class OAuth2 {
   public generateCodeVerifier(): string {
     const randomValue = generateRandomValue(CODE_VERIFIER_LENGTH);
 
-    return base64urlencode(randomValue);
+    return base64UrlEncodeAB(randomValue);
   }
 
   public async generatePKCECodeChallenge(
@@ -74,7 +74,7 @@ export class OAuth2 {
     try {
       const hashedVerifier = await hash(codeVerifier);
 
-      const codeChallenge = base64urlencode(hashedVerifier);
+      const codeChallenge = base64UrlEncodeAB(hashedVerifier);
 
       return {
         codeChallenge,
