@@ -2,15 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
-import router from '@/routes';
+// Base styles - tailwind etc.
 import '@/assets/base.css';
+// Plugins
+import '@/plugins';
+// Routes
+import router from '@/routes';
 
 const AppElement = document.querySelector('#app');
 
 function MainWrapper() {
   return (
     <React.StrictMode>
-      <div className="text-color-default dark:text-color-dark bg-shade-light dark:bg-shade-dark m-0 h-screen w-screen p-0 font-sans text-base antialiased transition-colors">
+      <div className="m-0 h-full min-h-screen w-screen bg-gray-200 p-0 font-sans text-base text-neutral-100 antialiased transition-colors">
         <RouterProvider router={router} />
       </div>
     </React.StrictMode>

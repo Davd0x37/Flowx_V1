@@ -25,7 +25,7 @@ export type CRYPTO_ERRORS =
   | 'DECRYPTION_ERROR'
   | 'IMPORT_KEY_FAILED'
   | 'DERIVE_KEY_FAILED'
-  | 'HASHING_ERROR';
+  | 'HASH_ERROR';
 // export class CryptoError extends BaseError<CRYPTO_ERRORS> {}
 
 export type FACTORY_ERRORS = 'FACTORY_NOT_FOUND';

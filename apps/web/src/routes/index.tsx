@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from '@/app';
 import { Authorize } from '@/views/authorize/main';
+import { Login, Register } from '@/views/authenticate';
 import { R404 } from '@/views/redirects/R404';
 
 export default createBrowserRouter([

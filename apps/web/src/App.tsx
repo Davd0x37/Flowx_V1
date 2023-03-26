@@ -1,4 +1,5 @@
 import { DefaultLayout } from '@/layouts';
+import { AuthenticateView } from './views/authenticate';
 
 /**
  * Handle internalGuard here and display appropriate modal
@@ -9,7 +10,9 @@ import { DefaultLayout } from '@/layouts';
 export default function App() {
   return (
     <DefaultLayout>
-      <main></main>
+      <main>
+        <AuthenticateView />
+      </main>
     </DefaultLayout>
   );
 }

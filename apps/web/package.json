@@ -10,15 +10,19 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@vectopus/atlas-icons": "^0.0.5",
+    "i18next": "^22.4.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^12.2.0",
     "react-router-dom": "6.8.1"
   },
   "devDependencies": {
     "@flowx/eslint-config-flowx": "workspace:^",
-    "@flowx/crypto_flerovium": "workspace:^",
+    "@iconify/react": "^4.1.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@types/react-i18next": "^8.1.0",
     "@vitejs/plugin-react-swc": "^3.1.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",

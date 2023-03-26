@@ -1,14 +1,19 @@
 import React, { PropsWithChildren } from 'react';
 
-interface IOnClick {
+interface ButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown;
 }
 
-export const Button = ({ children, onClick }: PropsWithChildren & IOnClick) => {
+export const Button = ({
+  children,
+  onClick,
+  type,
+}: PropsWithChildren & ButtonProps & React.ButtonHTMLAttributes<unknown>) => {
   return (
     <button
-      className="text-color-default bg-shade-light hover:bg-accent-light hover:text-color-light border-accent-dark rounded border p-2 transition"
+      className="rounded bg-emerald-600 p-2 px-4 py-2 text-sm font-medium text-emerald-50 transition hover:bg-emerald-700"
       onClick={(e) => onClick && onClick(e)}
+      type={type}
     >
       {children}
     </button>

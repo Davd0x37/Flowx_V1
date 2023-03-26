@@ -1,5 +1,4 @@
 /**
- *
  * @param {Date} previousDate selected date
  * @param {number} expiresIn add seconds to selected date
  * @returns {boolean} If selected date with added seconds has expired?

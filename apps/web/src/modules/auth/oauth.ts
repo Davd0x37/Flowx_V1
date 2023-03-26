@@ -19,7 +19,7 @@ import type {
 // https://github.com/panva/oauth4webapi/blob/main/src/index.ts
 
 export class OAuth2 {
-  private settings: OAuthSettings;
+  private readonly settings: OAuthSettings;
   private reqClient: RequestClient;
 
   private defaultEndpoints: Record<OAuthEndpoints, string> = {

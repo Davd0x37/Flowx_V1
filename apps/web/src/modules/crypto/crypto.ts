@@ -119,7 +119,7 @@ export async function encrypt(content: Uint8Array, password: string): Promise<Ui
     const derivedKey = await deriveKey(importedKey, salt);
 
     // Returns ArrayBuffer
-    const arrayBuffer = await subtle.encrypt(
+    const encrypted = await subtle.encrypt(
       {
         name: 'AES-GCM',
         iv,
@@ -128,12 +128,12 @@ export async function encrypt(content: Uint8Array, password: string): Promise<Ui
       content
     );
 
-    // Convert arraybuffer to Uint8Array
-    const encrypted = new Uint8Array(arrayBuffer);
-    const abIVData = new Uint8Array(new ArrayBuffer(IV_LEN * 2 + encrypted.length));
+    // cast encrypted to Uint8Array
+    const encryptedArrayBuffer = new Uint8Array(encrypted);
+    const abIVData = new Uint8Array(new ArrayBuffer(IV_LEN * 2 + encryptedArrayBuffer.length));
     abIVData.set(iv);
     abIVData.set(salt, IV_LEN);
-    abIVData.set(encrypted, IV_LEN * 2);
+    abIVData.set(encryptedArrayBuffer, IV_LEN * 2);
 
     return abIVData;
   } catch (error) {
@@ -172,7 +172,7 @@ export async function decrypt(encrypted: Uint8Array, password: string): Promise<
     const importedKey = await importKey(password);
     const derivedKey = await deriveKey(importedKey, salt);
 
-    const arrayBuffer = await subtle.decrypt(
+    const decrypted = await subtle.decrypt(
       {
         name: 'AES-GCM',
         iv,
@@ -181,9 +181,9 @@ export async function decrypt(encrypted: Uint8Array, password: string): Promise<
       data
     );
 
-    const decrypted = new Uint8Array(arrayBuffer);
+    const decryptedArrayBuffer = new Uint8Array(decrypted);
 
-    return decrypted;
+    return decryptedArrayBuffer;
   } catch (error) {
     debugError(error);
 
@@ -223,9 +223,11 @@ export async function hash(
   } catch (error) {
     debugError(error);
 
+    const message = error instanceof AppError ? error.message : `Couldn't hash input`;
+
     throw new AppError({
-      name: 'HASHING_ERROR',
-      message: `Couldn't hash input`,
+      name: 'HASH_ERROR',
+      message,
       cause: error,
     });
   }

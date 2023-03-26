@@ -1,37 +1,7 @@
-export interface ResultWrapper<T> {
-  data?: T;
-  error?: unknown;
-}
-
-export interface FileReadHandlers {
-  onload: (result: string, event: ProgressEvent<FileReader>) => void;
-  onerror: (event: ProgressEvent<FileReader>) => void;
-  onprogress: (event: ProgressEvent<FileReader>) => void;
-  onabort: (event: ProgressEvent<FileReader>) => void;
-}
-
-export interface URLDownload {
-  name: string;
-  url: string;
-}
-
-export interface FileSchema {
-  encryption: {
-    salt: string;
-  };
-  data: string;
-}
-
-export interface IOnClick {
-  onClick: (...args: unknown[]) => unknown;
-}
-
-/**
- * DEPENDENCY INVERSION TYPES/INTERFACES
- */
-export interface RequestClient {
-  fetch: (input: RequestInfo | URL, options?: RequestInit) => Promise<Response>;
-}
+export * from './DI';
+export * from './crypto';
+export * from './html_types';
+export * from './utils';
 
 // export interface Notification {
 //   mode: NotificationMode;

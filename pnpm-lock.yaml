@@ -18,31 +18,39 @@ importers:
 
   apps/web:
     specifiers:
-      '@flowx/crypto_flerovium': workspace:^
       '@flowx/eslint-config-flowx': workspace:^
+      '@iconify/react': ^4.1.0
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.11
+      '@types/react-i18next': ^8.1.0
+      '@vectopus/atlas-icons': ^0.0.5
       '@vitejs/plugin-react-swc': ^3.1.0
       autoprefixer: ^10.4.13
+      i18next: ^22.4.13
       postcss: ^8.4.21
       postcss-nested: ^6.0.0
       postcss-preset-env: ^8.0.1
       react: ^18.2.0
       react-dom: ^18.2.0
+      react-i18next: ^12.2.0
       react-router-dom: 6.8.1
       tailwindcss: ^3.2.7
       typescript: ^4.9.5
       vite: ^4.1.2
       vitest: ^0.29.2
     dependencies:
+      '@vectopus/atlas-icons': 0.0.5
+      i18next: 22.4.13
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-i18next: 12.2.0_2rh65uwnd6kial3dj4kteywnti
       react-router-dom: 6.8.1_biqbaboplfbrettd7655fr4n2y
     devDependencies:
-      '@flowx/crypto_flerovium': link:../../packages/wasm-crypto/pkg
       '@flowx/eslint-config-flowx': link:../../packages/eslint-config-flowx
+      '@iconify/react': 4.1.0_react@18.2.0
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.11
+      '@types/react-i18next': 8.1.0_2rh65uwnd6kial3dj4kteywnti
       '@vitejs/plugin-react-swc': 3.2.0_vite@4.1.4
       autoprefixer: 10.4.14_postcss@8.4.21
       postcss: 8.4.21
@@ -80,9 +88,6 @@ importers:
       eslint-plugin-react-hooks: 4.6.0_eslint@8.35.0
       prettier: 2.8.4
       typescript: 4.9.5
-
-  packages/wasm-crypto/pkg:
-    specifiers: {}
 
 packages:
 
@@ -155,6 +160,12 @@ packages:
     dependencies:
       '@babel/types': 7.17.0
     dev: true
+
+  /@babel/runtime/7.21.0:
+    resolution: {integrity: sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.11
 
   /@babel/template/7.20.7:
     resolution: {integrity: sha512-8SegXApWe6VoNw0r9JHpSteLKTpTiLZ4rMlGIm9JQ18KiCtyQiAMEazujAHrUS5flrcqYZa75ukev3P6QmUwUw==}
@@ -699,6 +710,19 @@ packages:
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
 
+  /@iconify/react/4.1.0_react@18.2.0:
+    resolution: {integrity: sha512-Mf72i3TNNKpKCKxmo7kzqyrUdCgaoljpqtWmtqpqwyxoV4ukhnDsSRNLhf2yBnqGr3cVZsdj/i0FMpXIY0Qk0g==}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      '@iconify/types': 2.0.0
+      react: 18.2.0
+    dev: true
+
+  /@iconify/types/2.0.0:
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+    dev: true
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -881,6 +905,18 @@ packages:
       '@types/react': 18.0.28
     dev: true
 
+  /@types/react-i18next/8.1.0_2rh65uwnd6kial3dj4kteywnti:
+    resolution: {integrity: sha512-d4xhcjX5b3roNMObRNMfb1HinHQlQLPo8xlDj60dnHeeAw2bBymR2cy/l1giJpHzo/ZFgSvgVUvIWr4kCrenCg==}
+    deprecated: This is a stub types definition. react-i18next provides its own type definitions, so you do not need this installed.
+    dependencies:
+      react-i18next: 12.2.0_2rh65uwnd6kial3dj4kteywnti
+    transitivePeerDependencies:
+      - i18next
+      - react
+      - react-dom
+      - react-native
+    dev: true
+
   /@types/react/18.0.28:
     resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
     dependencies:
@@ -1025,6 +1061,10 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.54.1
       eslint-visitor-keys: 3.3.0
+    dev: false
+
+  /@vectopus/atlas-icons/0.0.5:
+    resolution: {integrity: sha512-zMx7fOLyyzQB1/kla6whfBbgP+qOR/vKvOVWUpGIp1tDgRslFF2YDA8uKcRbSlWyxNQjOZLkAoiB4VImsl9IAA==}
     dev: false
 
   /@vitejs/plugin-react-swc/3.2.0_vite@4.1.4:
@@ -2155,6 +2195,16 @@ packages:
     dependencies:
       function-bind: 1.1.1
 
+  /html-parse-stringify/3.0.1:
+    resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
+    dependencies:
+      void-elements: 3.1.0
+
+  /i18next/22.4.13:
+    resolution: {integrity: sha512-GX7flMHRRqQA0I1yGLmaZ4Hwt1JfLqagk8QPDPZsqekbKtXsuIngSVWM/s3SLgNkrEXjA+0sMGNuOEkkmyqmWg==}
+    dependencies:
+      '@babel/runtime': 7.21.0
+
   /ignore/5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
@@ -2399,7 +2449,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-    dev: false
 
   /loupe/2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
@@ -3145,7 +3194,25 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
-    dev: false
+
+  /react-i18next/12.2.0_2rh65uwnd6kial3dj4kteywnti:
+    resolution: {integrity: sha512-5XeVgSygaGfyFmDd2WcXvINRw2WEC1XviW1LXY/xLOEMzsCFRwKqfnHN+hUjla8ZipbVJR27GCMSuTr0BhBBBQ==}
+    peerDependencies:
+      i18next: '>= 19.0.0'
+      react: '>= 16.8.0'
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.21.0
+      html-parse-stringify: 3.0.1
+      i18next: 22.4.13
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -3183,7 +3250,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /read-cache/1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
@@ -3197,6 +3263,9 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+
+  /regenerator-runtime/0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
 
   /regexp.prototype.flags/1.4.3:
     resolution: {integrity: sha512-fjggEOO3slI6Wvgjwflkc4NFRCTZAu5CnNfBd5qOMYhWdn67nJBBu34/TkD++eeFmd8C9r9jfXJ27+nSiRkSUA==}
@@ -3267,7 +3336,6 @@ packages:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
@@ -3711,6 +3779,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /void-elements/3.1.0:
+    resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
+    engines: {node: '>=0.10.0'}
 
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}

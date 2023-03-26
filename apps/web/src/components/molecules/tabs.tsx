@@ -10,15 +10,16 @@ export interface ITabProps {
 }
 
 export interface ITabsProps {
-  vertical?: boolean;
+  stretched?: boolean;
+  centered?: boolean;
   onTabChange?: (tab: ITabType) => void;
 }
 
 export const Tab = ({ children }: PropsWithChildren & ITabProps) => {
-  return <div className="p-2">{children}</div>;
+  return <div>{children}</div>;
 };
 
-export const Tabs = ({ children, onTabChange, vertical }: PropsWithChildren & ITabsProps) => {
+export const Tabs = ({ children, onTabChange, stretched, centered }: PropsWithChildren & ITabsProps) => {
   const [tabsList, setTabsList] = useState<ITabType[]>([]);
   const [activeTab, setActiveTab] = useState<TabID>(0);
 
@@ -46,15 +47,12 @@ export const Tabs = ({ children, onTabChange, vertical }: PropsWithChildren & IT
 
   const tabsListRender = tabsList.map(({ title }, idx) => {
     const isActive = idx === activeTab;
+
     return (
       <span
-        className={
-          (isActive
-            ? 'bg-shade-light text-color-default'
-            : 'bg-shade-dark border-shade-light hover:bg-shade-light hover:text-color-default') +
-          ' relative cursor-pointer snap-center rounded border p-2 text-center transition ' +
-          (vertical ? 'rounded-r-none border-r-0' : 'w-20 min-w-fit max-w-fit rounded-b-none border-b-0')
-        }
+        className={`relative cursor-pointer snap-center rounded-md px-4 py-2 text-center transition hover:bg-emerald-200 hover:text-emerald-800 ${
+          isActive ? 'bg-emerald-100 text-emerald-700' : ''
+        } ${stretched ? 'w-full' : ''}`}
         key={idx}
         onClick={() => changeTab(idx)}
       >
@@ -65,23 +63,16 @@ export const Tabs = ({ children, onTabChange, vertical }: PropsWithChildren & IT
 
   const activeTabRender = tabs.filter((_, idx) => idx === activeTab);
 
-  const horizontalTab = (
-    <>
-      <div className="flex snap-x snap-mandatory flex-nowrap gap-4 overflow-x-auto">{tabsListRender}</div>
-      <div className="bg-shade-dark border-shade-light rounded rounded-t-none border">{activeTabRender}</div>
-    </>
-  );
-
-  const verticalTab = (
-    <>
-      <div className="grid grid-cols-6">
-        <div className="col-start-1 col-end-3 flex flex-col gap-4">{tabsListRender}</div>
-        <div className="bg-shade-dark border-shade-light col-span-full col-start-3 rounded rounded-l-none border">
-          {activeTabRender}
-        </div>
+  return (
+    <div className="container divide-y divide-gray-100">
+      <div
+        className={`flex snap-x snap-mandatory flex-nowrap space-x-4 overflow-x-auto p-4 font-medium ${
+          centered ? 'justify-items-center' : ''
+        }`}
+      >
+        {tabsListRender}
       </div>
-    </>
+      <div className="p-4">{activeTabRender}</div>
+    </div>
   );
-
-  return <div className="container rounded border p-4">{vertical ? <>{verticalTab}</> : <>{horizontalTab}</>}</div>;
 };
