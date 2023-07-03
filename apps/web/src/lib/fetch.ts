@@ -1,5 +1,5 @@
-import { internalGuard } from '@/helpers';
-import { RequestClient } from '@/types';
+import { internalGuard } from 'app/helpers';
+import { RequestClient } from 'app/types';
 
 export const Fetch: RequestClient = {
   async fetch(input: RequestInfo | URL, options?: RequestInit): Promise<Response> {

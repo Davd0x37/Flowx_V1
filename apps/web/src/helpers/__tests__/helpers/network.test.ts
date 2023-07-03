@@ -1,4 +1,4 @@
-import { resolveUrl } from '@/helpers/network';
+import { resolveUrl } from 'app/helpers/network';
 import { describe, expect, it } from 'vitest';
 
 const TEST_URL = 'https://localhost.local';

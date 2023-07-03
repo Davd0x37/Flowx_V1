@@ -1,12 +1,17 @@
-import { Warning } from '@/assets/icons';
-import { Button } from '@/components';
-import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Warning } from 'app/assets/icons';
+import { Button } from 'app/components';
+import { Icon } from '@iconify/react';
 
 export const Login = () => {
   const { t } = useTranslation(['common']);
   const [hasError, setHasError] = useState(true);
+
+  const handleSubmit = useCallback((ev) => {
+    ev.preventDefault();
+  }, []);
 
   return (
     <>
@@ -23,13 +28,13 @@ export const Login = () => {
                   placeholder="email@example.com"
                   id="email"
                   autoComplete="email"
-                  className={`block w-full rounded-md border py-1.5 px-2 placeholder:text-gray-400 sm:text-sm ${
+                  className={`block w-full rounded-md border px-2 py-1.5 placeholder:text-gray-400 sm:text-sm ${
                     hasError ? 'border-red-400' : ''
                   }`}
                 />
               </div>
               {hasError ? (
-                <div className="error mt-1 ml-0.5 w-full text-sm text-red-400">
+                <div className="error ml-0.5 mt-1 w-full text-sm text-red-400">
                   <span className="flex items-center">
                     <Icon icon={Warning} fontSize="1rem" className="mr-1 inline-block" />
                     User already exists
@@ -50,13 +55,13 @@ export const Login = () => {
                   placeholder="Password"
                   id="password"
                   autoComplete="password"
-                  className={`block w-full rounded-md border py-1.5 px-2 placeholder:text-gray-400 sm:text-sm ${
+                  className={`block w-full rounded-md border px-2 py-1.5 placeholder:text-gray-400 sm:text-sm ${
                     hasError ? 'border-red-400' : ''
                   }`}
                 />
               </div>
               {hasError ? (
-                <div className="error mt-1 ml-0.5 w-full text-sm text-red-400">
+                <div className="error ml-0.5 mt-1 w-full text-sm text-red-400">
                   <span className="flex items-center">
                     <Icon icon={Warning} fontSize="1rem" className="mr-1 inline-block" />
                     Incorrect password
@@ -67,7 +72,9 @@ export const Login = () => {
               )}
             </div>
 
-            <Button type="submit">Login</Button>
+            <Button type="submit" onClick={handleSubmit}>
+              {t('common:CreateAccount')}
+            </Button>
           </div>
         </div>
       </form>

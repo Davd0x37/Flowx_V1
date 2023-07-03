@@ -1,4 +1,4 @@
-import { wait } from '@/helpers/async';
+import { wait } from 'app/helpers/async';
 import { describe, expect, it } from 'vitest';
 
 const TIME = 1000;

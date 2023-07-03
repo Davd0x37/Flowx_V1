@@ -1,4 +1,4 @@
-import { FileReadHandlers } from '@/types';
+import { FileReadHandlers } from 'app/types';
 
 export const readFile = (file: File, handlers: FileReadHandlers): void => {
   const reader = new FileReader();

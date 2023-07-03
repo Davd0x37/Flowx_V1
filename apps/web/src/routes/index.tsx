@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import App from '@/app';
-import { Authorize } from '@/views/authorize/main';
-import { Login, Register } from '@/views/authenticate';
-import { R404 } from '@/views/redirects/R404';
+import App from 'app/app';
+import { Login, Register } from 'app/views/authenticate';
+import { Authorize } from 'app/views/authorize/main';
+import { R404 } from 'app/views/redirects/R404';
 
 export default createBrowserRouter([
   {

@@ -1,11 +1,11 @@
-import { AppError, IV_LEN } from '@/helpers';
-import { Fetch } from '@/lib/fetch';
+import { AppError, IV_LEN } from 'app/helpers';
+import { Fetch } from 'app/lib/fetch';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { OAuth2 } from '../oauth';
 import { OAuthAuthorizeParameters, OAuthCodeChallengeStruct, OAuthSettings } from '../types';
 
-vi.mock('@/lib/fetch', () => {
+vi.mock('app/lib/fetch', () => {
   return {
     Fetch: {
       fetch: vi.fn(async () => {

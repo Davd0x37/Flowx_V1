@@ -20,7 +20,16 @@ module.exports = {
 
   plugins: ['react', 'react-hooks', '@typescript-eslint'],
 
-  overrides: [],
+  // overrides: [
+  //   {
+  //     files: ['*.graphql'],
+  //     parser: '@graphql-eslint/eslint-plugin',
+  //     plugins: ['@graphql-eslint'],
+  //     rules: {
+  //       '@graphql-eslint/known-type-names': 'error',
+  //     },
+  //   },
+  // ],
 
   ignorePatterns: ['**/*.js', '**/*.json', 'node_modules'],
 

@@ -1,0 +1,17 @@
+{
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+  },
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "paths": {
+      "app/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": true,
+    "declaration": true
+  },
+  "include": ["src"]
+}

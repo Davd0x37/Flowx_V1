@@ -8,7 +8,7 @@ export const Button = ({
   children,
   onClick,
   type,
-}: PropsWithChildren & ButtonProps & React.ButtonHTMLAttributes<unknown>) => {
+}: PropsWithChildren & ButtonProps & React.ComponentProps<'button'>) => {
   return (
     <button
       className="rounded bg-emerald-600 p-2 px-4 py-2 text-sm font-medium text-emerald-50 transition hover:bg-emerald-700"

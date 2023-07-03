@@ -1,9 +1,8 @@
-import { Button, Tab, Tabs } from '@/components';
-import { useCallback, useMemo, useState } from 'react';
+import { Tab, Tabs } from 'app/components';
+
 import { Login } from './login';
 import { Register } from './register';
 
-// @TODO: use tabs
 export const AuthenticateView = () => {
   return (
     <div className="relative">

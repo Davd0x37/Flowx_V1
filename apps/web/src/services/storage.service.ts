@@ -1,11 +1,11 @@
 // /* eslint-disable @typescript-eslint/restrict-template-expressions */
-// import { decrypt, encrypt } from '@/helpers/crypto';
-// import { generateDownloadUrl } from '@/helpers/fs';
-// import { Argon2 } from '@/helpers/hash';
-// import { useStore } from '@/store/main';
-// import { useServiceStore } from '@/store/service';
-// import { FileSchema, URLDownload } from '@/types/fs';
-// import { ConvertedStore, RootState } from '@/types/store';
+// import { decrypt, encrypt } from 'app/helpers/crypto';
+// import { generateDownloadUrl } from 'app/helpers/fs';
+// import { Argon2 } from 'app/helpers/hash';
+// import { useStore } from 'app/store/main';
+// import { useServiceStore } from 'app/store/service';
+// import { FileSchema, URLDownload } from 'app/types/fs';
+// import { ConvertedStore, RootState } from 'app/types/store';
 // import { Buffer } from 'buffer';
 // import { debug } from 'debug';
 

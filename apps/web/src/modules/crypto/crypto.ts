@@ -13,7 +13,7 @@
  * ```
  * 3. Encrypt
  */
-import { AppError, IV_LEN, debugError, internalGuard, stringToArrayBuffer } from '@/helpers';
+import { AppError, IV_LEN, debugError, internalGuard, stringToArrayBuffer } from 'app/helpers';
 
 export const generateRandomValue = (length: number): Uint8Array => {
   const { crypto } = internalGuard('crypto');

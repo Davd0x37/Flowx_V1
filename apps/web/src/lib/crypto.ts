@@ -1,5 +1,5 @@
 // https://github.com/dchest/tweetnacl-js
-import { CryptoClient } from '@/types';
+import { CryptoClient } from 'app/types';
 
 export const Crypto: CryptoClient = {
   encrypt: function (input: string | ArrayBuffer, key: string): ArrayBuffer | Promise<ArrayBuffer> {

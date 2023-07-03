@@ -1,4 +1,5 @@
-import { DefaultLayout } from '@/layouts';
+import { DefaultLayout } from 'app/layouts';
+
 import { AuthenticateView } from './views/authenticate';
 
 /**

@@ -1,10 +1,10 @@
 // /* eslint-disable @typescript-eslint/restrict-template-expressions */
-// import { hasTokens, tokensExpired } from '@/helpers/oauth';
-// import { GET_REDIRECT_URI } from '@/helpers/utils';
-// import { useServiceStore } from '@/store/service';
-// import { GrantTypeEnum } from '@/types/auth';
-// import { Selector } from '@/types/common';
-// import { Data, DataPath, Service } from '@/types/service';
+// import { hasTokens, tokensExpired } from 'app/helpers/oauth';
+// import { GET_REDIRECT_URI } from 'app/helpers/utils';
+// import { useServiceStore } from 'app/store/service';
+// import { GrantTypeEnum } from 'app/types/auth';
+// import { Selector } from 'app/types/common';
+// import { Data, DataPath, Service } from 'app/types/service';
 // import debug from 'debug';
 // import { get } from 'lodash';
 

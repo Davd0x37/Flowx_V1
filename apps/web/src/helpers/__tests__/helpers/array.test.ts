@@ -1,4 +1,4 @@
-import { excludeFromArrayByValue } from '@/helpers/array';
+import { excludeFromArrayByValue } from 'app/helpers/array';
 import { describe, expect, it } from 'vitest';
 
 const arrays = {

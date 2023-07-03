@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { internalGuard } from '@/helpers';
+import { internalGuard } from 'app/helpers';
 
 export type IKey = string;
 

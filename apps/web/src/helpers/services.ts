@@ -1,4 +1,4 @@
-// import { ServiceState } from '@/types/store';
+// import { ServiceState } from 'app/types/store';
 
 // export default {
 //   Spotify: {

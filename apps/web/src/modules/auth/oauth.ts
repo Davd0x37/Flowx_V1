@@ -1,7 +1,7 @@
-import { AppError, CODE_VERIFIER_LENGTH, base64UrlEncodeAB, debug, resolveUrl } from '@/helpers';
-import { RequestBuilder, URLBuilder } from '@/helpers/builders';
-import { generateRandomValue, hash } from '@/modules/crypto';
-import type { RequestClient, ResultWrapper } from '@/types';
+import { AppError, CODE_VERIFIER_LENGTH, base64UrlEncodeAB, debug, resolveUrl } from 'app/helpers';
+import { RequestBuilder, URLBuilder } from 'app/helpers/builders';
+import { generateRandomValue, hash } from 'app/modules/crypto';
+import type { RequestClient, ResultWrapper } from 'app/types';
 
 import type {
   CodeChallengeMethodType,

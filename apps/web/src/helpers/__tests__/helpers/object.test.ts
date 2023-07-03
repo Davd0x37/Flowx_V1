@@ -1,4 +1,4 @@
-import { Obj } from '@/helpers/object';
+import { Obj } from 'app/helpers/object';
 import { describe, expect, it } from 'vitest';
 
 const TEST_OBJ = {
