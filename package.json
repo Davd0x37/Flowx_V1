@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint",
-    "format": "prettier --config .prettierrc.js --write \"**/*.{ts,tsx,html,scss,json,yml,md}\"",
+    "format": "prettier --config .prettierrc.cjs --write \"**/*.{ts,tsx,html,scss,json,yml,md}\"",
     "api:dev": "pnpm run --filter api dev",
     "api:dev:ts-node": "pnpm run --filter api dev:ts-node",
     "web:dev": "pnpm run --filter web dev",
@@ -13,7 +13,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "eslint": "^8.44.0",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "typescript": "^5.1.6"
   }

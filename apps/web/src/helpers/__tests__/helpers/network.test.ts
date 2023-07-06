@@ -1,5 +1,6 @@
-import { resolveUrl } from 'app/helpers/network';
 import { describe, expect, it } from 'vitest';
+
+import { resolveUrl } from 'app/helpers/network';
 
 const TEST_URL = 'https://localhost.local';
 const TEST_URL_PATHNAME = 'testing';

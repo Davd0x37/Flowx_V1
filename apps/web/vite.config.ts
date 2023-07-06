@@ -12,7 +12,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'app': resolve(__dirname, './src'),
+      app: resolve(__dirname, './src'),
     },
   },
 });

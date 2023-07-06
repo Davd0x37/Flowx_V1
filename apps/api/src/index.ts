@@ -1,22 +1,24 @@
+import helmet from '@fastify/helmet';
 import 'dotenv/config';
 import Fastify from 'fastify';
 
 import Plugins from './plugins';
 import Routes from './routes';
 
+// Fastify instance
 const fastify = Fastify({
   logger: true,
 });
 
+// Register security/logging/other plugins
+fastify.register(helmet);
+
+// Register plugins (database, fetch, auth, etc.)
 Plugins.forEach((plugin) => {
-  fastify.register(plugin, {
-    client: 'better-sqlite3',
-    connection: {
-      filename: process.env.DATABASE_SQLITE_FILE as string,
-    },
-  });
+  fastify.register(plugin);
 });
 
+// Register routes (auth, graphql)
 Routes.forEach((route) => {
   fastify.register(route);
 });

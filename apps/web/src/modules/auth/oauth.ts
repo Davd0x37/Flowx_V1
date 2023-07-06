@@ -69,7 +69,7 @@ export class OAuth2 {
 
   public async generatePKCECodeChallenge(
     codeVerifier: string,
-    codeChallengeMethod: CodeChallengeMethodType = 'S256'
+    codeChallengeMethod: CodeChallengeMethodType = 'S256',
   ): Promise<OAuthCodeChallengeStruct> {
     try {
       const hashedVerifier = await hash(codeVerifier);
@@ -157,7 +157,7 @@ export class OAuth2 {
 
   public getTokenRequestURLBuilder(
     endpoint: URL | string,
-    options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE
+    options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE,
   ): URLBuilder {
     const urlBuilder = new URLBuilder(endpoint, {
       client_id: this.settings.clientId,
@@ -273,13 +273,13 @@ export class OAuth2 {
   }
 
   public async accessToken(
-    options: Omit<OAuthAccessTokenRequestPKCE, 'grantType'>
+    options: Omit<OAuthAccessTokenRequestPKCE, 'grantType'>,
   ): Promise<ResultWrapper<OAuthTokens>> {
     return this.__request('tokenEndpoint', { ...options, grantType: 'authorization_code' });
   }
 
   public async refreshToken(
-    options: Omit<OAuthRefreshTokensRequestPKCE, 'grantType'>
+    options: Omit<OAuthRefreshTokensRequestPKCE, 'grantType'>,
   ): Promise<ResultWrapper<OAuthTokens>> {
     return this.__request('tokenEndpoint', { ...options, grantType: 'refresh_token' });
   }
@@ -287,7 +287,7 @@ export class OAuth2 {
   private async __request(
     endpoint: OAuthEndpoints,
     // make union of possible options
-    options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE
+    options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE,
   ): Promise<ResultWrapper<OAuthTokens>> {
     const endpointUri = this.getEndpoint(endpoint);
     const basicAuth = this.getBasicAuthToken();

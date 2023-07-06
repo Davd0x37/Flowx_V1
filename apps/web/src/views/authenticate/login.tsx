@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Icon } from '@iconify/react';
+
 import { Warning } from 'app/assets/icons';
 import { Button } from 'app/components';
-import { Icon } from '@iconify/react';
 
 export const Login = () => {
   const { t } = useTranslation(['common']);

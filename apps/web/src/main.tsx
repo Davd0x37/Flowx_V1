@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
+// Base styles - tailwind etc.
+import 'app/assets/base.css';
 // Plugins
 import 'app/plugins';
 // Routes
 import router from 'app/routes';
-
-// Base styles - tailwind etc.
-import 'app/assets/base.css';
 
 const AppElement = document.querySelector('#app');
 

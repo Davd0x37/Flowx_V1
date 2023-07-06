@@ -1,4 +1,4 @@
-import type { FastifyError, FastifyInstance, FastifyPluginAsync } from 'fastify';
+import type { FastifyError, FastifyInstance } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import knexBuild, { Knex } from 'knex';
 

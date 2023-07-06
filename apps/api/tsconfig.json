@@ -1,7 +1,7 @@
 {
   "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node",
+    "experimentalSpecifierResolution": "node"
   },
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -10,8 +10,8 @@
     "paths": {
       "app/*": ["./src/*"]
     },
-    "allowImportingTsExtensions": true,
+    // "allowImportingTsExtensions": true,
     "declaration": true
   },
-  "include": ["src"]
+  "include": ["src", "src/knexfile.ts", "src/db/**/*.ts"]
 }

@@ -1,6 +1,7 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { AppError, IV_LEN } from 'app/helpers';
 import { Fetch } from 'app/lib/fetch';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { OAuth2 } from '../oauth';
 import { OAuthAuthorizeParameters, OAuthCodeChallengeStruct, OAuthSettings } from '../types';

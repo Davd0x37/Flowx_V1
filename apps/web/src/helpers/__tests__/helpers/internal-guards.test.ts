@@ -1,6 +1,7 @@
+import { describe, expect, it } from 'vitest';
+
 import { RuntimeAppError } from 'app/helpers/error';
 import { internalGuard, isSupported } from 'app/helpers/internal-guards';
-import { describe, expect, it } from 'vitest';
 
 const exampleObject = {
   key: 'value',
