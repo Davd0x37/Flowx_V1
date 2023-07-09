@@ -17,10 +17,9 @@
     "seed:run": "npm run knex:run -- seed:run --debug"
   },
   "devDependencies": {
-    "@flowx/eslint-config-flowx": "workspace:^",
     "@swc-node/register": "^1.6.6",
-    "@types/node": "^20.4.0",
-    "nodemon": "^2.0.22",
+    "@types/node": "^20.4.1",
+    "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
@@ -32,7 +31,7 @@
     "fastify-plugin": "^4.5.0",
     "graphql": "^16.7.1",
     "graphql-yoga": "^4.0.3",
-    "knex": "^2.4.2",
+    "knex": "^2.5.0",
     "zod": "^3.21.4"
   }
 }

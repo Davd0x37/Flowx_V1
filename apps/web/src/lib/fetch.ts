@@ -1,4 +1,4 @@
-import { internalGuard } from 'app/helpers';
+import { internalGuard } from 'app/common';
 import { RequestClient } from 'app/types';
 
 export const Fetch: RequestClient = {

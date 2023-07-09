@@ -1,6 +1,6 @@
 import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
 
-export default async (fastify: FastifyInstance, options: FastifyPluginOptions) => {
+export default async (fastify: FastifyInstance, _options: FastifyPluginOptions) => {
   fastify.get('/auth/:lel', async (request, response) => {
     console.log(request.params);
 

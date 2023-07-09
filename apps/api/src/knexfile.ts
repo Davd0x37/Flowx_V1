@@ -1,16 +1,11 @@
-// import 'dotenv/config';
 import type { Knex } from 'knex';
 
 export default {
   development: {
     client: 'better-sqlite3',
     connection: {
-      filename: './mydb.sqlite',
+      filename: '../db_files/mydb.sqlite',
     },
-    // pool: {
-    //   min: 2,
-    //   max: 10,
-    // },
     migrations: {
       directory: './db/migrations',
       loadExtensions: ['.ts'],

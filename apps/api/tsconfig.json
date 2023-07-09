@@ -3,15 +3,41 @@
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "target": "ESNext",
     "module": "ESNext",
+
+    // Build options
+    "declaration": true,
+    "useDefineForClassFields": true,
+    "moduleResolution": "node",
+    "incremental": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+
+    // Linting
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "strict": true,
+    "skipLibCheck": true,
+
+    // Paths
+    "baseUrl": ".",
     "paths": {
       "app/*": ["./src/*"]
     },
-    // "allowImportingTsExtensions": true,
-    "declaration": true
+
+    // ?
+    "maxNodeModuleJsDepth": 5
   },
-  "include": ["src", "src/knexfile.ts", "src/db/**/*.ts"]
+  "include": ["src", "src/knexfile.ts"],
+  "exclude": ["node_modules"]
 }

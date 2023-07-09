@@ -23,7 +23,7 @@ Routes.forEach((route) => {
   fastify.register(route);
 });
 
-fastify.get('/', async (request, reply) => {
+fastify.get('/', async (_request, _reply) => {
   return { hello: 'world' };
 });
 
