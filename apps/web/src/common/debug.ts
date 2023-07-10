@@ -1,5 +1,5 @@
+import { isDevEnv } from './env';
 import { BaseError } from './error';
-import { isDevEnv } from './root-config';
 
 const consoleStyles = {
   groupName: `font-size: 1.3em; background: #040507; color: #f44336; padding: 3px 10px;`,

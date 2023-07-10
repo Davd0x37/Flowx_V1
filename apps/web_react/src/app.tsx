@@ -1,5 +1,4 @@
 import { DefaultLayout } from 'app/layouts';
-
 import { AuthenticateView } from './views/authenticate';
 
 /**

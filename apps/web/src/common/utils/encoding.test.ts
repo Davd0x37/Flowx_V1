@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-
-import * as encoding from 'app/common/encoding';
+import * as encoding from './encoding';
 
 const exampleText = 'text_to_encode';
 

@@ -2,7 +2,6 @@ import { AppError, CODE_VERIFIER_LENGTH, base64UrlEncodeAB, debug, resolveUrl } 
 import { RequestBuilder, URLBuilder } from 'app/common/builders';
 import { generateRandomValue, hash } from 'app/modules/crypto';
 import type { RequestClient, ResultWrapper } from 'app/types';
-
 import type {
   CodeChallengeMethodType,
   OAuthAccessTokenRequestPKCE,

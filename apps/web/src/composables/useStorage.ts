@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import { ref } from 'vue';
 import { internalGuard } from 'app/common';
 
 export type IKey = string;
@@ -32,7 +31,7 @@ const setItem = (key: IKey, val: string, storageType: StorageType) => {
 };
 
 export default (key: IKey, value: unknown, storageType: StorageType = StorageType.LOCAL) => {
-  const [storedValue, setStoredValue] = useState(() => {
+  const storedValue = ref(() => {
     const item = getItem(key, storageType);
 
     return item ? JSON.parse(item) : value;
@@ -41,7 +40,7 @@ export default (key: IKey, value: unknown, storageType: StorageType = StorageTyp
   const setValue = (val: unknown) => {
     const valueToStore = typeof val === 'function' ? val(storedValue) : val;
 
-    setStoredValue(valueToStore);
+    storedValue.value = valueToStore;
 
     setItem(key, JSON.stringify(valueToStore), storageType);
   };

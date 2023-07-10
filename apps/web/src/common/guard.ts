@@ -1,5 +1,5 @@
+import { defaultGlobal } from './env';
 import { RuntimeAppError } from './error';
-import { defaultGlobal } from './root-config';
 
 /**
  * Checks if global container provides required functionality
@@ -17,6 +17,7 @@ export const isSupported = <T extends object>(fun: string, container: T): boolea
  * @template T
  * @param {T} expr Expression to check
  * @param {RuntimeAppError} [error] Error instance
+ * @throws Throws error if expression is nullable
  * @return {NonNullable<T>} {asserts} Returns unwrapped value
  */
 function assert<T>(expr: T, error: RuntimeAppError): asserts expr is NonNullable<T> {

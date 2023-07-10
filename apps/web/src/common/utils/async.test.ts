@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-
-import { wait } from 'app/common/async';
+import { wait } from './async';
 
 const TIME = 1000;
 

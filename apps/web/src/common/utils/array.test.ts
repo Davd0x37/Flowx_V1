@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-
-import { excludeFromArrayByValue } from 'app/common/array';
+import { excludeFromArrayByValue } from './array';
 
 const arrays = {
   strings: ['one', 'two', 'three'],

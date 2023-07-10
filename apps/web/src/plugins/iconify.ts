@@ -21,3 +21,5 @@ addCollection({
     },
   },
 });
+
+export default () => {};

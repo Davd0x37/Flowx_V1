@@ -1,5 +1,4 @@
 import { Tab, Tabs } from 'app/components';
-
 import { Login } from './login';
 import { Register } from './register';
 

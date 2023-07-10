@@ -1,5 +1,4 @@
 import { MutableRefObject, useEffect, useState } from 'react';
-
 import { internalGuard } from 'app/helpers';
 
 export default (elementRef: MutableRefObject<HTMLElement>, defaultState = false) => {

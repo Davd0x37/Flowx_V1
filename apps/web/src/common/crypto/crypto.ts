@@ -13,7 +13,17 @@
  * ```
  * 3. Encrypt
  */
-import { AppError, IV_LEN, debugError, internalGuard, stringToArrayBuffer } from 'app/common';
+import { AppError, debugError, internalGuard, stringToArrayBuffer } from 'app/common';
+
+/**
+ * Constant size for code verifier in Uint8Array - default 32 bytes
+ */
+export const CODE_VERIFIER_LENGTH = 32;
+
+/**
+ * Initialization vector length
+ */
+export const IV_LEN = 16;
 
 export const generateRandomValue = (length: number): Uint8Array => {
   const { crypto } = internalGuard('crypto');
@@ -109,7 +119,7 @@ export async function encrypt(content: Uint8Array, password: string): Promise<Ui
 
   try {
     // Generate IV and salt
-    const iv = generateRandomValue(IV_LEN);
+    const initializationVector = generateRandomValue(IV_LEN);
     const salt = generateRandomValue(IV_LEN);
 
     // Get CryptoKey from password
@@ -122,7 +132,7 @@ export async function encrypt(content: Uint8Array, password: string): Promise<Ui
     const encrypted = await subtle.encrypt(
       {
         name: 'AES-GCM',
-        iv,
+        iv: initializationVector,
       },
       derivedKey,
       content
@@ -131,7 +141,7 @@ export async function encrypt(content: Uint8Array, password: string): Promise<Ui
     // cast encrypted to Uint8Array
     const encryptedArrayBuffer = new Uint8Array(encrypted);
     const abIVData = new Uint8Array(new ArrayBuffer(IV_LEN * 2 + encryptedArrayBuffer.length));
-    abIVData.set(iv);
+    abIVData.set(initializationVector);
     abIVData.set(salt, IV_LEN);
     abIVData.set(encryptedArrayBuffer, IV_LEN * 2);
 
@@ -162,7 +172,7 @@ export async function decrypt(encrypted: Uint8Array, password: string): Promise<
     crypto: { subtle },
   } = internalGuard('crypto');
 
-  const [iv, salt, data] = [
+  const [initializationVector, salt, data] = [
     encrypted.slice(0, IV_LEN),
     encrypted.slice(IV_LEN, IV_LEN * 2),
     encrypted.slice(IV_LEN * 2),
@@ -175,7 +185,7 @@ export async function decrypt(encrypted: Uint8Array, password: string): Promise<
     const decrypted = await subtle.decrypt(
       {
         name: 'AES-GCM',
-        iv,
+        iv: initializationVector,
       },
       derivedKey,
       data
@@ -213,13 +223,9 @@ export async function hash(
   } = internalGuard('crypto');
 
   try {
-    if (typeof input === 'string') {
-      const arrayBuffer = stringToArrayBuffer(input);
+    const inputArrayBuffer = typeof input === 'string' ? stringToArrayBuffer(input) : input;
 
-      return subtle.digest(algorithm, arrayBuffer);
-    }
-
-    return subtle.digest(algorithm, input);
+    return subtle.digest(algorithm, inputArrayBuffer);
   } catch (error) {
     debugError(error);
 

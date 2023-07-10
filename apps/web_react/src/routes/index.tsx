@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-
 import App from 'app/app';
 import { Login, Register } from 'app/views/authenticate';
 import { Authorize } from 'app/views/authorize/main';

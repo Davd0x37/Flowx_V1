@@ -1,15 +1,15 @@
 import { createApp } from 'vue';
-
-import { createPinia } from 'pinia';
-
 // Plugins
-import 'app/plugins';
-
+import plugins from 'app/plugins';
 import App from './App.vue';
+import routes from './routes';
 
-const pinia = createPinia();
 const app = createApp(App);
 
-app.use(pinia);
+app.use(routes);
+
+plugins.forEach((plugin) => {
+  plugin(app);
+});
 
 app.mount('#app');
