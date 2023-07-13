@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint",
-    "lint:fix": "eslint --fix .",
+    "lint:fix": "eslint --fix",
     "format": "prettier --config prettier.config.cjs --write \"**/*.{ts,tsx,html,scss,json,yml,md,vue}\"",
     "api:dev": "pnpm run --filter api dev",
     "api:dev:ts-node": "pnpm run --filter api dev:ts-node",
@@ -14,7 +14,7 @@
     "shared:dev": "pnpm run --filter @flowx/shared dev",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "configure-husky": "pnpx husky install && husky add .husky/pre-commit \"pnpx --no-install lint-staged\""
+    "configure-husky": "pnpx husky install && husky add .husky/pre-commit \"pnpx lint-staged\""
   },
   "devDependencies": {
     "@graphql-eslint/eslint-plugin": "^3.20.0",
@@ -40,7 +40,6 @@
   },
   "lint-staged": {
     "**/*.{js,json,tsx,vue}": [
-      "eslint --fix .",
       "prettier --config prettier.config.cjs --write \"**/*.{ts,tsx,html,scss,json,yml,md,vue}\""
     ]
   },
