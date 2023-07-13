@@ -7,25 +7,6 @@ export default [
     plugins: ['@typescript-eslint'],
   },
   {
-    files: ['**/*.tsx'],
-    root: true,
-    parser: '@typescript-eslint/parser',
-    extends: [
-      'eslint:recommended',
-      'plugin:react/recommended',
-      'plugin:react/jsx-runtime',
-      'plugin:react-hooks/recommended',
-      'plugin:@typescript-eslint/recommended',
-    ],
-    plugins: ['react', 'react-hooks', '@typescript-eslint'],
-
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-  },
-  {
     files: ['**/*.vue'],
     root: true,
     parser: 'vue-eslint-parser',
@@ -37,7 +18,7 @@ export default [
     plugins: ['@typescript-eslint'],
   },
   {
-    files: ['**/*.vue', '**/*.ts', '**/*.tsx'],
+    files: ['**/*.vue', '**/*.ts'],
     root: true,
     extends: ['prettier'],
     rules: {

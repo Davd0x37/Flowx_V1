@@ -1,5 +1,5 @@
 import { Ref, ref, watchEffect } from 'vue';
-import { internalGuard } from 'app/common';
+import { internalGuard } from '@flowx/shared';
 
 export default (elementRef: Ref<HTMLElement>, defaultState = false) => {
   const wnd = internalGuard('IntersectionObserver');

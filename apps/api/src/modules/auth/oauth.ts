@@ -1,7 +1,7 @@
-import { AppError, CODE_VERIFIER_LENGTH, base64UrlEncodeAB, debug, resolveUrl } from 'app/common';
-import { RequestBuilder, URLBuilder } from 'app/common/builders';
-import { generateRandomValue, hash } from 'app/modules/crypto';
-import type { RequestClient, ResultWrapper } from 'app/types';
+import { AppError, RequestBuilder, URLBuilder, base64UrlEncodeAB, debug, resolveUrl } from '@flowx/shared';
+import type { ResultWrapper } from '@flowx/shared';
+import type { RequestClient } from 'app/lib/fetch';
+import { generateRandomValue, hash } from '../crypto';
 import type {
   CodeChallengeMethodType,
   OAuthAccessTokenRequestPKCE,
@@ -15,7 +15,12 @@ import type {
   OAuthValidationParameters,
 } from './types';
 
-// https://github.com/panva/oauth4webapi/blob/main/src/index.ts
+// https://github.com/panva/oauth4webapi
+
+/**
+ * Constant size for code verifier in Uint8Array - default 32 bytes
+ */
+export const CODE_VERIFIER_LENGTH = 32;
 
 export class OAuth2 {
   private readonly settings: OAuthSettings;
@@ -154,7 +159,7 @@ export class OAuth2 {
     return urlBuilder.toString();
   }
 
-  public getTokenRequestURLBuilder(
+  public tokenURLBuilder(
     endpoint: URL | string,
     options: OAuthAccessTokenRequestPKCE | OAuthRefreshTokensRequestPKCE
   ): URLBuilder {
@@ -303,7 +308,7 @@ export class OAuth2 {
       };
     }
 
-    const requestTokenURL = this.getTokenRequestURLBuilder(endpointUri, options);
+    const requestTokenURL = this.tokenURLBuilder(endpointUri, options);
     const queryStringBody = requestTokenURL.getSearchParams().toString();
 
     const requestBuilder = new RequestBuilder(endpointUri, {

@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  <div>
+  <div
+    class="m-0 h-full min-h-screen w-screen bg-gray-200 p-0 font-sans text-base text-neutral-100 antialiased transition-colors"
+  >
     <p>
       <router-link to="/">Go to Home</router-link>
       <router-link to="/about">Go to About</router-link>

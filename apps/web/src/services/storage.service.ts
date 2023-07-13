@@ -9,6 +9,18 @@
 // import { Buffer } from 'buffer';
 // import { debug } from 'debug';
 
+export interface URLDownload {
+  name: string;
+  url: string;
+}
+
+export interface FileSchema {
+  encryption: {
+    salt: string;
+  };
+  data: string;
+}
+
 // export class StorageService {
 //   static async downloadVault(vault: RootState): Promise<URLDownload> {
 //     try {

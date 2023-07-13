@@ -9,10 +9,8 @@ const config = {
   proseWrap: 'never',
   plugins: [require('@trivago/prettier-plugin-sort-imports'), require('prettier-plugin-tailwindcss')],
   importOrder: [
+    '^dotenv(.*)$',
     '^vue(.*)$',
-    '^react(.*)$',
-    '^react-dom(.*)$',
-    '^react-router-dom(.*)$',
     '<THIRD_PARTY_MODULES>',
     '^@flowx/(.*)$',
     '^app/(.*)$',

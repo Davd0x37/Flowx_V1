@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { internalGuard } from 'app/common';
+import { internalGuard } from '@flowx/shared';
 
 export type IKey = string;
 
