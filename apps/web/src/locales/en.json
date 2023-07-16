@@ -1,0 +1,28 @@
+{
+  "button": {
+    "login": "Login",
+    "register": "Register",
+    "createAccount": "Create account"
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "password": "Password"
+  },
+  "home": {
+    "title": "Home"
+  },
+  "authenticate": {
+    "email": "@:profile.email",
+    "password": "@:profile.password"
+  },
+  "error": {
+    "userAlreadyExists": "User already exists",
+    "incorrectPassword": "Incorrect password",
+    "repeatPassword": "Passwords must be the same"
+  },
+  "placeholder": {
+    "email": "email{'@'}example.com",
+    "password": "SuperSecretPassword"
+  }
+}

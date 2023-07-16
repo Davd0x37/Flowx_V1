@@ -1,39 +1,26 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-
-// import { createBrowserRouter } from 'react-router-dom';
-
-// import App from 'app/app';
-// import { Login, Register } from 'app/views/authenticate';
-// import { Authorize } from 'app/views/authorize/main';
-// import { R404 } from 'app/views/redirects/R404';
-
-// export default createBrowserRouter([
-//   {
-//     path: '/',
-//     element: <App />,
-//     children: [
-//       {
-//         path: 'authorize/:service',
-//         element: <Authorize />,
-//       },
-//     ],
-//   },
-//   {
-//     path: '*',
-//     element: <R404 />,
-//   },
-// ]);
-
-const Home = { template: '<div>Home</div>' };
-const About = { template: '<div>About</div>' };
+import { createRouter, createWebHistory } from 'vue-router';
+import { Authenticate, Home, NotFound } from 'app/views';
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/about', component: About },
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+  },
+  {
+    path: '/authenticate',
+    name: 'authenticate',
+    component: Authenticate,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFound,
+  },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 

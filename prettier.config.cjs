@@ -6,7 +6,6 @@ const config = {
   singleQuote: true,
   tabWidth: 2,
   useTabs: false,
-  proseWrap: 'never',
   plugins: [require('@trivago/prettier-plugin-sort-imports'), require('prettier-plugin-tailwindcss')],
   importOrder: [
     '^dotenv(.*)$',

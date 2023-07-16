@@ -279,13 +279,19 @@ export class OAuth2 {
   public async accessToken(
     options: Omit<OAuthAccessTokenRequestPKCE, 'grantType'>
   ): Promise<ResultWrapper<OAuthTokens>> {
-    return this.__request('tokenEndpoint', { ...options, grantType: 'authorization_code' });
+    return this.__request('tokenEndpoint', {
+      ...options,
+      grantType: 'authorization_code',
+    });
   }
 
   public async refreshToken(
     options: Omit<OAuthRefreshTokensRequestPKCE, 'grantType'>
   ): Promise<ResultWrapper<OAuthTokens>> {
-    return this.__request('tokenEndpoint', { ...options, grantType: 'refresh_token' });
+    return this.__request('tokenEndpoint', {
+      ...options,
+      grantType: 'refresh_token',
+    });
   }
 
   private async __request(

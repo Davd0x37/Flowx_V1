@@ -1,0 +1,28 @@
+{
+  "button": {
+    "login": "Login",
+    "register": "Rejestracja",
+    "createAccount": "Załóż konto"
+  },
+  "profile": {
+    "title": "Profil",
+    "email": "Email",
+    "password": "Hasło"
+  },
+  "home": {
+    "title": "Strona główna"
+  },
+  "authenticate": {
+    "email": "@:profile.email",
+    "password": "@:profile.password"
+  },
+  "error": {
+    "userAlreadyExists": "Użytkownik już istnieje",
+    "incorrectPassword": "Nieprawidłowe hasło",
+    "repeatPassword": "Hasła muszą być takie same"
+  },
+  "placeholder": {
+    "email": "email{'@'}example.com",
+    "password": "Super$TajneHasłO1"
+  }
+}

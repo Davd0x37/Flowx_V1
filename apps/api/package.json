@@ -7,14 +7,14 @@
     "dev:ts-node": "node --loader ts-node/esm src/index.ts",
     "dev": "nodemon --exec \"node --loader @swc-node/register/esm\" ./src/index.ts",
     "knex:run": "NODE_OPTIONS='--loader ts-node/esm' knex --knexfile src/knexfile.ts",
-    "migrate:currentVersion": "npm run knex:run -- migrate:currentVersion",
-    "migrate:up": "npm run knex:run -- migrate:up",
-    "migrate:list": "npm run knex:run -- migrate:list",
-    "migrate:make": "npm run knex:run -- migrate:make --",
-    "migrate:latest": "npm run knex:run -- migrate:latest --debug",
-    "migrate:rollback": "npm run knex:run -- migrate:rollback --all --debug",
-    "seed:make": "npm run knex:run -- seed:make --",
-    "seed:run": "npm run knex:run -- seed:run --debug"
+    "migrate:currentVersion": "pnpm knex:run migrate:currentVersion",
+    "migrate:up": "pnpm knex:run migrate:up",
+    "migrate:list": "pnpm knex:run migrate:list",
+    "migrate:make": "pnpm knex:run migrate:make",
+    "migrate:latest": "pnpm knex:run migrate:latest --debug",
+    "migrate:rollback": "pnpm knex:run migrate:rollback --all --debug",
+    "seed:make": "pnpm knex:run seed:make",
+    "seed:run": "pnpm knex:run seed:run --debug"
   },
   "devDependencies": {
     "@swc-node/register": "^1.6.6",

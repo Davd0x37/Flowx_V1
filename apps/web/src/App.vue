@@ -1,20 +1,18 @@
 <script setup lang="ts">
-//
+import { ref } from 'vue';
+
+const el = ref();
 </script>
 
 <template>
   <div
-    class="m-0 h-full min-h-screen w-screen bg-gray-200 p-0 font-sans text-base text-neutral-100 antialiased transition-colors"
+    :ref="el"
+    class="m-0 h-full min-h-screen w-screen bg-zinc-100 p-0 font-sans text-base text-neutral-900 antialiased transition-colors dark:bg-zinc-900 dark:text-neutral-100"
   >
     <p>
-      <router-link to="/">Go to Home</router-link>
-      <router-link to="/about">Go to About</router-link>
+      <router-link :to="{ name: 'home' }">Go to Home</router-link>
+      <router-link :to="{ name: 'authenticate' }">Go to About</router-link>
     </p>
     <router-view></router-view>
   </div>
 </template>
-
-<style scoped>
-/* Base styles - tailwind etc. */
-@import './assets/base.css';
-</style>

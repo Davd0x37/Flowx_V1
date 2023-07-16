@@ -5,6 +5,7 @@ export default [
     parser: '@typescript-eslint/parser',
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
     plugins: ['@typescript-eslint'],
+    ignorePatterns: ['node_modules', 'eslint.config.js'],
   },
   {
     files: ['**/*.vue'],
@@ -16,6 +17,7 @@ export default [
       sourceType: 'module',
     },
     plugins: ['@typescript-eslint'],
+    ignorePatterns: ['node_modules', 'eslint.config.js'],
   },
   {
     files: ['**/*.vue', '**/*.ts'],
@@ -32,7 +34,7 @@ export default [
         },
       ],
     },
-    ignorePatterns: ['node_modules'],
+    ignorePatterns: ['node_modules', 'eslint.config.js'],
   },
   {
     files: ['*.graphql'],
@@ -41,6 +43,10 @@ export default [
     rules: {
       '@graphql-eslint/known-type-names': 'error',
     },
-    ignorePatterns: ['node_modules'],
+    ignorePatterns: ['node_modules', 'eslint.config.js'],
+  },
+  {
+    files: ['**/*.vue', '**/*.ts', '*.graphql'],
+    ignorePatterns: ['node_modules', 'eslint.config.js'],
   },
 ];
