@@ -14,7 +14,8 @@
   },
   "authenticate": {
     "email": "@:profile.email",
-    "password": "@:profile.password"
+    "password": "@:profile.password",
+    "repeatPassword": "Repeat password"
   },
   "error": {
     "userAlreadyExists": "User already exists",
@@ -22,7 +23,6 @@
     "repeatPassword": "Passwords must be the same"
   },
   "placeholder": {
-    "email": "email{'@'}example.com",
-    "password": "SuperSecretPassword"
+    "email": "email{'@'}example.com"
   }
 }

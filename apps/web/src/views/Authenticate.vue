@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { UserInterface } from '@flowx/shared';
-import { LoginForm, VTab, VTabs } from 'app/components';
+import { UserInterface, UserRegisterInterface } from '@flowx/shared';
+import { LoginForm, RegisterForm, VTab, VTabs } from 'app/components';
 
-const handleSubmit = (ev: UserInterface) => {
+const handleLogin = (ev: UserInterface) => {
+  console.log(ev);
+};
+
+const handleRegister = (ev: UserRegisterInterface) => {
   console.log(ev);
 };
 </script>
 
 <template>
   <div className="relative">
-    <div className="m-auto max-w-md rounded-md bg-neutral-200 dark:bg-neutral-800 drop-shadow-md p-5">
-      <VTabs>
+    <div className="m-auto max-w-md rounded-md bg-neutral-200 dark:bg-neutral-800 drop-shadow-md p-5 ">
+      <VTabs centered>
         <VTab name="Login">
-          <LoginForm :onSubmit="handleSubmit"></LoginForm>
+          <LoginForm :onSubmit="handleLogin"></LoginForm>
         </VTab>
         <VTab name="Register">
-          <!-- <LoginForm :onSubmit="handleSubmit"></LoginForm> -->
+          <RegisterForm :onSubmit="handleRegister"></RegisterForm>
         </VTab>
-        <!-- </Tab> -->
-        <!-- <Tab title="register"> -->
-        <!-- <Register /> -->
-        <!-- </Tab> -->
       </VTabs>
     </div>
   </div>

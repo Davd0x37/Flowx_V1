@@ -1,33 +1,34 @@
 <template>
-  <div :id="computedId" v-show="isActiveTab">
+  <div :id="computedId" v-if="isActiveTab">
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, inject, onMounted } from 'vue';
-import { activeTabSymbol, addTabSymbol } from './Tabs.symbol';
+import { tabsComposableSymbol } from 'app/composables/useTabs';
 
-const props = defineProps<{
-  name: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    name: string;
+  }>(),
+  {
+    name: 'NewTab',
+  }
+);
 
-
-
-const activeTab = inject(activeTabSymbol);
-const addTab = inject(addTabSymbol);
+// Reference to useTabs composable from parent (VTabs)
+const tabsComposable = inject(tabsComposableSymbol);
 const computedId = computed(() => props.name);
 
 const isActiveTab = computed(() => {
-  return activeTab?.value == computedId.value;
+  return tabsComposable?.activeTab?.value == computedId.value;
 });
 
 onMounted(() => {
-  if (addTab) {
-    addTab({
-      name: props.name,
-      id: computedId.value,
-    });
-  }
+  tabsComposable?.addTab({
+    name: props.name,
+    id: computedId.value,
+  });
 });
 </script>

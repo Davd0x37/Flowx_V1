@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { VHeader } from 'app/components';
 
-const el = ref();
+//
 </script>
 
 <template>
   <div
-    :ref="el"
-    class="m-0 h-full min-h-screen w-screen bg-zinc-100 p-0 font-sans text-base text-neutral-900 antialiased transition-colors dark:bg-zinc-900 dark:text-neutral-100"
+    class="m-0 h-full min-h-screen w-screen bg-zinc-100 p-4 font-sans text-base text-neutral-900 antialiased transition-colors dark:bg-zinc-900 dark:text-neutral-100"
   >
+    <v-header></v-header>
     <p>
       <router-link :to="{ name: 'home' }">Go to Home</router-link>
       <router-link :to="{ name: 'authenticate' }">Go to About</router-link>

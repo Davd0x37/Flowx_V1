@@ -47,13 +47,12 @@ const handleSubmit = (ev: Event) => {
           minlength="8"
           autocomplete="new-password"
           required
-          :placeholder="t('placeholder.password')"
           :show-error="hasError"
           :error-message="t('error.incorrectPassword')"
           >{{ t('authenticate.password') }}</VInputLabel
         >
       </div>
     </div>
-    <VButton class="mt-6 w-full" type="submit">{{ t('button.createAccount') }}</VButton>
+    <VButton class="mt-6 w-full" type="submit">{{ t('button.login') }}</VButton>
   </form>
 </template>

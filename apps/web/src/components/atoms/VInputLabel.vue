@@ -13,7 +13,7 @@ const props = defineProps<{
   errorMessage?: string;
 }>();
 
-const errorClass = computed(() => (props.showError ? 'border-red-400' : ''));
+const errorClass = computed(() => ({ 'border-red-400': props.showError }));
 </script>
 
 <template>

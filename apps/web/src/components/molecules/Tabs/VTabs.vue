@@ -1,16 +1,19 @@
 <template>
   <div>
     <nav
-      :class="['flex space-x-6 border-b border-neutral-200 dark:border-neutral-700', { 'justify-center': centered }]"
+      :class="['flex space-x-6 border-b border-neutral-300 dark:border-neutral-700', { 'justify-center': centered }]"
     >
       <button
-        v-for="(tab, idx) in tabs"
+        v-for="({ id, name }, idx) in tabs"
         :key="idx"
         type="button"
-        class="transition-color transition-background whitespace-nowrap border-b border-transparent p-3 text-sm font-semibold text-neutral-600 hover:border-green-500 hover:text-green-500 dark:text-neutral-400 [&.active]:border-green-500 [&.active]:text-green-500"
-        @click="() => activateTab({ id: tab.id })"
+        :class="[
+          'transition-color transition-background whitespace-nowrap border-b border-transparent p-3 text-sm font-semibold text-neutral-600 hover:border-green-500 hover:text-green-500 dark:text-neutral-400 [&.active]:border-green-500 [&.active]:text-green-500',
+          { active: id === activeTab },
+        ]"
+        @click="() => setActiveTab(id)"
       >
-        {{ tab.name }}
+        {{ name }}
       </button>
     </nav>
     <div class="container mt-4">
@@ -21,9 +24,7 @@
 
 <script setup lang="ts">
 import { onMounted, provide } from 'vue';
-import { useTabs } from './Tabs.composable';
-import { activeTabSymbol, addTabSymbol } from './Tabs.symbol';
-import type { ActiveTabRef, AddTabFunction, TabId } from './Tabs.type';
+import { TabsComposable, tabsComposableSymbol, useTabs } from 'app/composables/useTabs';
 
 withDefaults(
   defineProps<{
@@ -34,27 +35,12 @@ withDefaults(
   }
 );
 
-const { tabs, activeTab, addTab } = useTabs();
-
-const activateTab = ({ id }: { id: TabId }) => {
-  if (tabs.value.find((tab) => tab.id === id)) {
-    activeTab.value = id;
-  }
-};
-
-const activateFirstTab = () => {
-  const firstTab = tabs.value?.[0];
-  if (typeof firstTab === 'undefined') return;
-
-  const id = firstTab.id;
-
-  activateTab({ id });
-};
+const tabsComposable = useTabs();
+const { activateFirstTab, setActiveTab, tabs, activeTab } = tabsComposable;
 
 onMounted(() => {
   activateFirstTab();
 });
 
-provide<AddTabFunction>(addTabSymbol, addTab);
-provide<ActiveTabRef>(activeTabSymbol, activeTab);
+provide<TabsComposable>(tabsComposableSymbol, tabsComposable);
 </script>
