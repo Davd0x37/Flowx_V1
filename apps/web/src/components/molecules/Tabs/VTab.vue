@@ -12,6 +12,8 @@ const props = defineProps<{
   name: string;
 }>();
 
+
+
 const activeTab = inject(activeTabSymbol);
 const addTab = inject(addTabSymbol);
 const computedId = computed(() => props.name);

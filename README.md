@@ -2,8 +2,6 @@
 
 Used libraries, icons, fonts etc.
 
-Icons: https://atlasicons.vectopus.com/
-
 Use in future:
 Preline - https://preline.co/docs/index.html
 Vee-validate - https://github.com/logaretm/vee-validate/
