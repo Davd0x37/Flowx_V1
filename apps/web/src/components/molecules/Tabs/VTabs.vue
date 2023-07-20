@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav class="flex justify-center space-x-6 border-b border-neutral-200 dark:border-neutral-700">
+    <nav
+      :class="['flex space-x-6 border-b border-neutral-200 dark:border-neutral-700', { 'justify-center': centered }]"
+    >
       <button
         v-for="(tab, idx) in tabs"
         :key="idx"
@@ -22,6 +24,15 @@ import { onMounted, provide } from 'vue';
 import { useTabs } from './Tabs.composable';
 import { activeTabSymbol, addTabSymbol } from './Tabs.symbol';
 import type { ActiveTabRef, AddTabFunction, TabId } from './Tabs.type';
+
+withDefaults(
+  defineProps<{
+    centered: boolean;
+  }>(),
+  {
+    centered: false,
+  }
+);
 
 const { tabs, activeTab, addTab } = useTabs();
 
