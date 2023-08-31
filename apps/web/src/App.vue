@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { VSidebar } from 'app/components';
+
+// import { getFeature, getFeatures } from './common/features';
+
+// console.log(getFeature('user'));
 </script>
 
 <template>

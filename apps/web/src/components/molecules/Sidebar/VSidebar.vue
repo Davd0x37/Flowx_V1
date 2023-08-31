@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Icon } from '@iconify/vue';
-import { ChevronDown, Home, Profile, Settings, VaultOpen } from 'app/assets/icons';
+
+import { Home, Profile, Settings, VaultOpen } from 'app/assets/icons';
 import { VLink } from 'app/components';
+
 import LinkGroup from './VSidebarGroup.vue';
 
 const { t } = useI18n();
@@ -18,8 +18,9 @@ const { t } = useI18n();
 
       <div>
         <LinkGroup :title="t('user.title')" :icon="Profile">
+          <VLink :to="{ name: 'user-authenticate' }" :icon="Home">{{ t('user.authenticate.title') }}</VLink>
           <VLink :to="{ name: 'user-details' }" :icon="Home">{{ t('user.title') }}</VLink>
-          <VLink :to="{ name: 'user-settings' }" :icon="Home">{{ t('user.settingsTitle') }}</VLink>
+          <VLink :to="{ name: 'user-settings' }" :icon="Home">{{ t('user.settings.title') }}</VLink>
         </LinkGroup>
       </div>
 

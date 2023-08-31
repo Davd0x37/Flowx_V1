@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+
 import { UserInterface } from '@flowx/shared';
+
 import { VButton, VInputLabel } from 'app/components';
 
 const props = defineProps<{
@@ -35,7 +37,7 @@ const handleSubmit = (ev: Event) => {
           :placeholder="t('placeholder.email')"
           :show-error="hasError"
           :error-message="t('error.userAlreadyExists')"
-          >{{ t('authenticate.email') }}</VInputLabel
+          >{{ t('user.authenticate.email') }}</VInputLabel
         >
       </div>
 
@@ -49,7 +51,7 @@ const handleSubmit = (ev: Event) => {
           required
           :show-error="hasError"
           :error-message="t('error.incorrectPassword')"
-          >{{ t('authenticate.password') }}</VInputLabel
+          >{{ t('user.authenticate.password') }}</VInputLabel
         >
       </div>
     </div>

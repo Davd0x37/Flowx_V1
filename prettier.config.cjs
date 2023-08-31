@@ -16,7 +16,7 @@ const config = {
     '^[./].*(?<!\\.(c|sc)ss)$',
     '(c|sc)ss$',
   ],
-  importOrderSeparation: false,
+  importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 };
 

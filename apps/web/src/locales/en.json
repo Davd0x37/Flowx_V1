@@ -4,31 +4,17 @@
     "register": "Register",
     "createAccount": "Create account"
   },
+
   "home": {
     "title": "Home"
   },
-  "user": {
-    "title": "Profile",
-    "settingsTitle": "Settings",
-    "email": "Email",
-    "password": "Password"
-  },
-  "services": {
-    "title": "Services",
-    "settingsTitle": "Services settings"
-  },
-  "authenticate": {
-    "login": "Login",
-    "register": "Register",
-    "email": "@:user.email",
-    "password": "@:user.password",
-    "repeatPassword": "Repeat password"
-  },
+
   "error": {
     "userAlreadyExists": "User already exists",
     "incorrectPassword": "Incorrect password",
     "repeatPassword": "Passwords must be the same"
   },
+
   "placeholder": {
     "email": "email{'@'}example.com"
   }

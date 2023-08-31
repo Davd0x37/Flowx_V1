@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { InputHTMLAttributes, LabelHTMLAttributes, computed } from 'vue';
+
 import { Icon } from '@iconify/vue';
+
 import { Warning } from 'app/assets/icons';
+
 import VInput from './VInput.vue';
 import VLabel from './VLabel.vue';
 
