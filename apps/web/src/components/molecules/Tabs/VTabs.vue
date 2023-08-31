@@ -7,7 +7,10 @@
         v-for="({ id, name }, idx) in tabs"
         :key="idx"
         type="button"
-        :class="[linkClass, { active: id === activeTab }]"
+        :class="[
+          'tab tab-bordered tab-lg hover:text-secondary [&.tab-active]:text-secondary [&.tab-active]:!border-secondary text-sm font-semibold',
+          { 'tab-active': id === activeTab },
+        ]"
         @click="() => setActiveTab(id)"
       >
         {{ name }}
@@ -33,7 +36,7 @@ withDefaults(
 );
 
 const linkClass =
-  "transition-color transition-background after:content-[' '] relative whitespace-nowrap border-b border-transparent p-3 text-sm font-semibold text-neutral-600 transition-colors after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:rounded after:transition-colors hover:text-green-500 after:hover:bg-green-500 dark:text-neutral-400 [&.active]:text-green-500 [&.active]:after:bg-green-500";
+  "transition-color transition-background after:content-[''] relative whitespace-nowrap border-b border-transparent p-3 text-sm font-semibold text-neutral-600 transition-colors after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:rounded after:transition-colors hover:text-secondary after:hover:bg-secondary dark:text-neutral-400 [&.active]:text-secondary [&.active]:after:bg-secondary";
 
 const tabsComposable = useTabs();
 const { activateFirstTab, setActiveTab, tabs, activeTab } = tabsComposable;

@@ -1,20 +1,27 @@
 {
   "button": {
-    "login": "Login",
-    "register": "Rejestracja",
+    "login": "Zaloguj",
+    "register": "Zarejestruj",
     "createAccount": "Załóż konto"
-  },
-  "profile": {
-    "title": "Profil",
-    "email": "Email",
-    "password": "Hasło"
   },
   "home": {
     "title": "Strona główna"
   },
+  "user": {
+    "title": "Profile",
+    "settingsTitle": "Ustawienia profilu",
+    "email": "Email",
+    "password": "Hasło"
+  },
+  "services": {
+    "title": "Serwisy",
+    "settingsTitle": "Ustawienia serwisów"
+  },
   "authenticate": {
-    "email": "@:profile.email",
-    "password": "@:profile.password",
+    "login": "Logowanie",
+    "register": "Rejestracja",
+    "email": "@:user.email",
+    "password": "@:user.password",
     "repeatPassword": "Powtórz hasło"
   },
   "error": {

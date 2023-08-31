@@ -1,11 +1,25 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { Authenticate, Home, NotFound } from 'app/views';
+import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
+import { Authenticate, Home, NotFound, User, UserDetails, UserSettings } from 'app/views';
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: User,
+    children: [
+      { path: 'user-details', name: 'user-details', component: UserDetails },
+      { path: 'settings', name: 'user-settings', component: UserSettings },
+    ],
+  },
+  {
+    path: '/services',
+    name: 'services',
+    component: Authenticate,
   },
   {
     path: '/authenticate',

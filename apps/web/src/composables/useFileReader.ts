@@ -1,6 +1,13 @@
 import { ref } from 'vue';
 
-export default (file: File) => {
+const READ_TYPE = {
+  TEXT: 'TEXT',
+  ARRAY_BUFFER: 'ARRAYBUFFER',
+  BINARY_STRING: 'BINARY_STRING',
+  DATA_URL: 'DATA_URL',
+} as const;
+
+export default (file: File, readType: keyof typeof READ_TYPE = 'TEXT') => {
   const reader = new FileReader();
 
   const data = ref<string | ArrayBuffer | null>(null);
@@ -31,7 +38,28 @@ export default (file: File) => {
     isLoading.value = false;
   };
 
-  reader.readAsText(file);
+  switch (readType) {
+    case 'ARRAY_BUFFER': {
+      reader.readAsArrayBuffer(file);
+      break;
+    }
+
+    case 'BINARY_STRING': {
+      reader.readAsBinaryString(file);
+      break;
+    }
+
+    case 'DATA_URL': {
+      reader.readAsDataURL(file);
+      break;
+    }
+
+    default:
+    case 'TEXT': {
+      reader.readAsText(file);
+      break;
+    }
+  }
 
   return {
     data,

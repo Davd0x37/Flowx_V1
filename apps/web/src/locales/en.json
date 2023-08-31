@@ -4,17 +4,24 @@
     "register": "Register",
     "createAccount": "Create account"
   },
-  "profile": {
-    "title": "Profile",
-    "email": "Email",
-    "password": "Password"
-  },
   "home": {
     "title": "Home"
   },
+  "user": {
+    "title": "Profile",
+    "settingsTitle": "Settings",
+    "email": "Email",
+    "password": "Password"
+  },
+  "services": {
+    "title": "Services",
+    "settingsTitle": "Services settings"
+  },
   "authenticate": {
-    "email": "@:profile.email",
-    "password": "@:profile.password",
+    "login": "Login",
+    "register": "Register",
+    "email": "@:user.email",
+    "password": "@:user.password",
     "repeatPassword": "Repeat password"
   },
   "error": {

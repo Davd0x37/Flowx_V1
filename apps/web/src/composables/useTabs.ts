@@ -11,7 +11,7 @@ export interface TabsComposable {
   /**
    * Reactive box holding list of {@link Tab} elements
    *
-   * @type {Ref<Tab[]>}
+   * @type {Ref<Tab[]>} Reference with array of tabs
    * @memberof TabsComposable
    */
   tabs: Ref<Tab[]>;
@@ -19,7 +19,7 @@ export interface TabsComposable {
   /**
    * Currently active tab
    *
-   * @type {(Ref<TabId | null>)}
+   * @type {(Ref<TabId | null>)} Tab reference or null
    * @memberof TabsComposable
    */
   activeTab: Ref<TabId | null>;

@@ -3,10 +3,12 @@ import { internalGuard } from '@flowx/shared';
 
 export type IKey = string;
 
-export enum StorageType {
-  LOCAL = 'localStorage',
-  SESSION = 'sessionStorage',
-}
+const CStorageType = {
+  LOCAL: 'localStorage',
+  SESSION: 'sessionStorage',
+} as const;
+
+export type StorageType = (typeof CStorageType)[keyof typeof CStorageType];
 
 /**
  * Returns local/session storage if is available
@@ -30,7 +32,7 @@ const setItem = (key: IKey, val: string, storageType: StorageType) => {
   return storage.setItem(key, val);
 };
 
-export default (key: IKey, value: unknown, storageType: StorageType = StorageType.LOCAL) => {
+export default (key: IKey, value: unknown, storageType: StorageType = 'localStorage') => {
   const storedValue = ref(() => {
     const item = getItem(key, storageType);
 

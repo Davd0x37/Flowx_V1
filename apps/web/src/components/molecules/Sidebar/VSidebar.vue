@@ -1,0 +1,35 @@
+<script setup lang="ts">
+import { reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { Icon } from '@iconify/vue';
+import { ChevronDown, Home, Profile, Settings, VaultOpen } from 'app/assets/icons';
+import { VLink } from 'app/components';
+import LinkGroup from './VSidebarGroup.vue';
+
+const { t } = useI18n();
+</script>
+
+<template>
+  <div class="border-e border-e-gray-700 bg-neutral-200 px-5 py-1 shadow-md dark:bg-neutral-900">
+    <div class="space-y-2">
+      <div>
+        <VLink to="home" :icon="Home">{{ t('home.title') }}</VLink>
+      </div>
+
+      <div>
+        <LinkGroup :title="t('user.title')" :icon="Profile">
+          <VLink :to="{ name: 'user-details' }" :icon="Home">{{ t('user.title') }}</VLink>
+          <VLink :to="{ name: 'user-settings' }" :icon="Home">{{ t('user.settingsTitle') }}</VLink>
+        </LinkGroup>
+      </div>
+
+      <div>
+        <VLink :to="{ name: 'services' }" :icon="VaultOpen">{{ t('services.title') }}</VLink>
+      </div>
+
+      <div>
+        <VLink :to="{ name: 'home' }" :icon="Settings">{{ t('settings.title') }}</VLink>
+      </div>
+    </div>
+  </div>
+</template>

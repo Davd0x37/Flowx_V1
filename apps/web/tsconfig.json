@@ -30,7 +30,8 @@
     // Paths
     "baseUrl": ".",
     "paths": {
-      "app/*": ["./src/*"]
+      "app/*": ["./src/*"],
+      "features/*": ["./src/features/*"]
     },
 
     // ?
