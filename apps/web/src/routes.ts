@@ -1,5 +1,4 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
-
 import { Home, NotFound } from 'app/views';
 
 const routes: RouteRecordRaw[] = [

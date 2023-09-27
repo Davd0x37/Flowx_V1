@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-
+import { useRoute, useRouter } from 'vue-router';
 import { Home, Profile, Settings, VaultOpen } from 'app/assets/icons';
+import { castVueRoutesToNestedObject } from 'app/common/routes';
 import { VLink } from 'app/components';
-
 import LinkGroup from './VSidebarGroup.vue';
 
 const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+
+let routes = castVueRoutesToNestedObject(router.getRoutes());
+console.log(routes)
 </script>
 
 <template>
@@ -24,9 +29,9 @@ const { t } = useI18n();
         </LinkGroup>
       </div>
 
-      <div>
+      <!-- <div>
         <VLink :to="{ name: 'services' }" :icon="VaultOpen">{{ t('services.title') }}</VLink>
-      </div>
+      </div> -->
 
       <div>
         <VLink :to="{ name: 'home' }" :icon="Settings">{{ t('settings.title') }}</VLink>

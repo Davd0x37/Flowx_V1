@@ -39,7 +39,7 @@ export const defaultGlobalExist = (): NonNullable<typeof defaultGlobal> => {
     new RuntimeAppError({
       name: 'GLOBAL_HANDLER_NOT_AVAILABLE',
       message: 'Requested "Global / Window" handler is not available in current runtime!',
-    })
+    }),
   );
 
   return defaultGlobalRef;
@@ -61,7 +61,7 @@ export const internalGuard = (fun: string): NonNullable<typeof defaultGlobal> =>
     new RuntimeAppError({
       name: 'RUNTIME_FUNCTION_NOT_AVAILABLE',
       message: `Requested "${fun}" is not available in current runtime!`,
-    })
+    }),
   );
 
   return defaultGlobalRef;

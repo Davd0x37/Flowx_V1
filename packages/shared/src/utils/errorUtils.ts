@@ -1,5 +1,4 @@
 import { APP_ERRORS, RUNTIME_ERRORS } from 'app/types/appErrorCodes';
-
 import { isDevEnv } from './env';
 
 /**

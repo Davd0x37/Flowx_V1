@@ -1,8 +1,6 @@
 import 'dotenv/config';
-
 import helmet from '@fastify/helmet';
 import Fastify from 'fastify';
-
 import Plugins from './plugins';
 import Routes from './routes';
 

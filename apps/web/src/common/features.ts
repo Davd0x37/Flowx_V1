@@ -1,30 +1,33 @@
-// import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from 'vue-router';
+import { StoreDefinition, defineStore } from 'pinia';
 
-// export interface FeatureLocales {
-//   [key: PropertyKey]: Record<PropertyKey, unknown>;
-// }
+export interface FeatureLocales {
+  [key: PropertyKey]: Record<PropertyKey, unknown>;
+}
 
-// export type FeatureRoutes = RouteRecordRaw;
+export type FeatureRoutes = RouteRecordRaw;
 
-// // export interface FeatureStore =
+export type FeatureStore<T> = T;
 
-// export interface Feature {
-//   [key: PropertyKey]: unknown;
-//   locales: FeatureLocales;
-//   routes: FeatureRoutes;
-//   store: FeatureStore;
-// }
+type FeatureName = string;
 
-// const featuresStore = new Map();
+export interface Feature<StoreType> {
+  [key: PropertyKey]: unknown;
+  locales: FeatureLocales;
+  routes: FeatureRoutes;
+  store: StoreType;
+}
 
-// export const getFeatures = () => featuresStore;
+const featuresStore: Map<FeatureName, Feature<any>> = new Map();
 
-// export const getFeature = (featureName: string) => featuresStore.get(featureName);
+export const getFeatures = () => featuresStore;
 
-// export const installFeature = (featureName: string, feature: Feature) => {
-//   if (featuresStore.has(featureName)) return;
+export const getFeature = (featureName: FeatureName) => featuresStore.get(featureName);
 
-//   featuresStore.set(featureName, feature);
+export const installFeature = <StoreType>(featureName: FeatureName, feature: Feature<StoreType>) => {
+  if (featuresStore.has(featureName)) return;
 
-//   return feature;
-// };
+  featuresStore.set(featureName, feature);
+
+  return feature;
+};

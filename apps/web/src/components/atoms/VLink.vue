@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouteLocationRaw } from 'vue-router';
-
 import { Icon, IconProps } from '@iconify/vue';
 
 defineProps<{ icon?: string; iconSettings?: Omit<IconProps, 'icon'>; to: RouteLocationRaw }>();

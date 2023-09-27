@@ -1,7 +1,6 @@
 import type { FastifyError, FastifyInstance } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import knexBuild, { Knex } from 'knex';
-
 import knexConfig from '../config/knex';
 
 // Declare additonal knex property in global Fastify type using declaration merging

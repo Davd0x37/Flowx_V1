@@ -86,7 +86,7 @@ const deriveKey = async (key: CryptoKey, salt: Uint8Array): Promise<CryptoKey> =
         length: 256,
       },
       false,
-      ['encrypt', 'decrypt']
+      ['encrypt', 'decrypt'],
     );
   } catch (error) {
     debugError(error);
@@ -130,7 +130,7 @@ export async function encrypt(content: Uint8Array, password: string): Promise<Ui
         iv: initializationVector,
       },
       derivedKey,
-      content
+      content,
     );
 
     // cast encrypted to Uint8Array
@@ -183,7 +183,7 @@ export async function decrypt(encrypted: Uint8Array, password: string): Promise<
         iv: initializationVector,
       },
       derivedKey,
-      data
+      data,
     );
 
     const decryptedArrayBuffer = new Uint8Array(decrypted);
@@ -211,7 +211,7 @@ export async function decrypt(encrypted: Uint8Array, password: string): Promise<
  */
 export async function hash(
   input: string | ArrayBuffer,
-  algorithm: 'SHA-256' | 'SHA-384' | 'SHA-512' = 'SHA-256'
+  algorithm: 'SHA-256' | 'SHA-384' | 'SHA-512' = 'SHA-256',
 ): Promise<ArrayBuffer> {
   const {
     crypto: { subtle },

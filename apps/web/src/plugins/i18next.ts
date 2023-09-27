@@ -1,9 +1,8 @@
 import { App } from 'vue';
 import { createI18n } from 'vue-i18n';
-
 import messages from 'app/locales';
 
-const i18n = createI18n({
+export const i18n = createI18n({
   locale: 'pl',
   fallbackLocale: 'en',
   legacy: false,

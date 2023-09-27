@@ -1,9 +1,10 @@
-import { RouteRecordRaw } from 'vue-router';
+import router from 'app/routes';
+import { ServiceList } from './views';
 
-import ServiceList from './views/ServiceList.vue';
-
-export default {
+router.addRoute({
   path: '/services',
   name: 'services',
   component: ServiceList,
-} as RouteRecordRaw;
+});
+
+export default {};

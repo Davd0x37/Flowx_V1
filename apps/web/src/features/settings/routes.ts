@@ -1,3 +1,13 @@
-import { RouteRecordRaw } from 'vue-router';
+// import router from 'app/routes';
 
-export default {} as RouteRecordRaw;
+// import { SettingsDefault } from './views';
+
+// router.addRoute({
+//   path: '/settings',
+//   name: 'settings',
+//   component: SettingsDefault,
+//   children: [
+//   ],
+// });
+
+export default {};

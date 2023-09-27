@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 import { computed, inject, onMounted } from 'vue';
-
 import { tabsComposableSymbol } from 'app/composables/useTabs';
 
 const props = withDefaults(
@@ -15,7 +14,7 @@ const props = withDefaults(
   }>(),
   {
     name: 'NewTab',
-  }
+  },
 );
 
 // Reference to useTabs composable from parent (VTabs)

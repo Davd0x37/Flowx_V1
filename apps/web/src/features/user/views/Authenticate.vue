@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-
 import { UserInterface, UserRegisterInterface } from '@flowx/shared';
-
 import { VTab, VTabs } from 'app/components';
-
 import { LoginForm, RegisterForm } from '../components';
 
 const { t } = useI18n();

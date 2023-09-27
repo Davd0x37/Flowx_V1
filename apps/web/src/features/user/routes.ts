@@ -1,8 +1,7 @@
-import { RouteRecordRaw } from 'vue-router';
-
+import router from 'app/routes';
 import { Authenticate, UserDefault, UserDetails, UserSettings } from './views';
 
-export default {
+router.addRoute({
   path: '/user',
   name: 'user',
   component: UserDefault,
@@ -11,4 +10,6 @@ export default {
     { path: 'user-details', name: 'user-details', component: UserDetails },
     { path: 'settings', name: 'user-settings', component: UserSettings },
   ],
-} as RouteRecordRaw;
+});
+
+export default {};

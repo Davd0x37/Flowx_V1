@@ -1,12 +1,12 @@
 {
   "name": "flowx",
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@8.8.0",
   "private": true,
   "type": "module",
   "scripts": {
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "format": "prettier --config prettier.config.cjs --write \"**/*.{js,ts,tsx,html,css,scss,json,yml,md,vue}\"",
+    "format": "prettier --write \"**/*.{js,ts,tsx,html,css,scss,json,yml,md,vue}\"",
     "api:run": "pnpm --filter api",
     "web:run": "pnpm --filter web",
     "shared:run": "pnpm --filter @flowx/shared",
@@ -21,31 +21,31 @@
     "configure-husky": "pnpx husky install && husky add .husky/pre-commit \"pnpx lint-staged\""
   },
   "devDependencies": {
-    "@graphql-eslint/eslint-plugin": "^3.20.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
-    "@vitest/ui": "^0.33.0",
-    "eslint": "^8.44.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-config-standard-with-typescript": "^36.0.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-n": "^16.0.1",
+    "@graphql-eslint/eslint-plugin": "^3.20.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "@vitest/ui": "^0.34.5",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-vue": "^9.15.1",
+    "eslint-plugin-vue": "^9.17.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.3",
-    "prettier": "^2.8.7",
-    "prettier-plugin-tailwindcss": "^0.3.0",
-    "typescript": "^5.1.6",
-    "vite": "^4.4.3",
-    "vitest": "^0.33.0",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.4",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.5",
     "vue-eslint-parser": "^9.3.1"
   },
   "lint-staged": {
     "**/*.{js,json,tsx,vue}": [
       "eslint --fix",
-      "prettier --config prettier.config.cjs --write \"**/*.{ts,tsx,html,scss,json,yml,md,vue}\""
+      "prettier --config prettier.config.js --write \"**/*.{ts,tsx,html,scss,json,yml,md,vue}\""
     ]
   },
   "husky": {

@@ -1,12 +1,12 @@
-/** @type {import("prettier").Options} */
-const config = {
+/** @type {import("prettier").Config} */
+export default {
   printWidth: 120,
   arrowParens: 'always',
   semi: true,
   singleQuote: true,
   tabWidth: 2,
   useTabs: false,
-  plugins: [require('@trivago/prettier-plugin-sort-imports'), require('prettier-plugin-tailwindcss')],
+  plugins: ['@trivago/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
   importOrder: [
     '^dotenv(.*)$',
     '^vue(.*)$',
@@ -16,8 +16,6 @@ const config = {
     '^[./].*(?<!\\.(c|sc)ss)$',
     '(c|sc)ss$',
   ],
-  importOrderSeparation: true,
+  importOrderSeparation: false,
   importOrderSortSpecifiers: true,
 };
-
-module.exports = config;

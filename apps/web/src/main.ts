@@ -1,10 +1,8 @@
 import { createApp } from 'vue';
-
 // Styles
 import 'app/assets/base.css';
 // Plugins
 import plugins from 'app/plugins';
-
 import App from './App.vue';
 import setupFeatures from './features';
 import routes from './routes';

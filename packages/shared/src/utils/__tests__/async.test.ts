@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import { wait } from '../async';
 
 const TIME = 1000;
@@ -15,6 +14,6 @@ describe('Test async helpers', () => {
       await wait(TIME);
       expect(res).toBe(150);
     },
-    { timeout: TIME + 1000 }
+    { timeout: TIME + 1000 },
   );
 });
