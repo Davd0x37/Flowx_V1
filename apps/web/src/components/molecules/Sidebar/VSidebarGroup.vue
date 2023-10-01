@@ -10,9 +10,9 @@ defineProps<{
 </script>
 
 <template>
-  <details class="group [&_summary::-webkit-details-marker]:hidden">
+  <details class="[&_summary::-webkit-details-marker]:hidden">
     <summary
-      class="group box-border flex h-10 items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+      class="box-border flex h-10 items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
     >
       <div class="flex items-center gap-2">
         <Icon v-if="icon" :icon="icon" width="24" v-bind="iconSettings" />
@@ -20,7 +20,7 @@ defineProps<{
         <span class="text-sm font-medium">{{ title }}</span>
       </div>
 
-      <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+      <span class="animate-details-chevron shrink-0 transition duration-300">
         <Icon :icon="ChevronDown" width="24" />
       </span>
     </summary>
@@ -30,3 +30,9 @@ defineProps<{
     </div>
   </details>
 </template>
+
+<style scoped>
+details[open] > summary > .animate-details-chevron {
+  transform: rotate(-180deg);
+}
+</style>

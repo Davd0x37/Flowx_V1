@@ -1,10 +1,22 @@
 /**
  * Converts ArrayBuffer data into hex string
  * @param {Uint8Array} buffer Data saved in ArrayBuffer instance
- * @returns {stirng} ArrayBuffer converted to hex
+ * @returns {string} ArrayBuffer converted to hex
  */
 export const toHex = (buffer: Uint8Array): string =>
   buffer.reduce((mem, val) => mem + `00${val.toString(16)}`.slice(-2), '');
+
+/**
+ * Converts string to hex
+ *
+ * @param {string} input Input string
+ * @return {string} {string} Converted string to hex
+ */
+export const strToHex = (input: string): string =>
+  input
+    .split('')
+    .map((str) => str.charCodeAt(0).toString(16))
+    .join('');
 
 /**
  * Converts input string into base64 string
