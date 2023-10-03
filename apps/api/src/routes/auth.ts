@@ -1,7 +1,7 @@
 import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
 
 export default async (fastify: FastifyInstance, _options: FastifyPluginOptions) => {
-  fastify.get('/auth/:lel', async (request, response) => {
+  fastify.get('/auth/:test', async (request, response) => {
     console.log(request.params);
 
     fastify.knex.as('xd').then;

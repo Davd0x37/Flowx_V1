@@ -1,5 +1,4 @@
 import { RouteRecordRaw } from 'vue-router';
-import { StoreDefinition, defineStore } from 'pinia';
 
 export interface FeatureLocales {
   [key: PropertyKey]: Record<PropertyKey, unknown>;
